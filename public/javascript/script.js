@@ -4,7 +4,7 @@
  * Connexion WebSocket
  */
 
-const socket = io('http://localhost:3000');
+const socket = io();
 
 socket.on('connect', (req, res) => {
   console.log('connection établie');

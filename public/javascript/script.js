@@ -137,7 +137,7 @@ socket.on('weHaveAWinner', (data) => {
   console.log('win');
   const div = document.createElement('div');
   div.className = 'winnerMenu'
-  div.innerHTML = `<p>Le gagnant est ${data.name}</p><a href="/">Retour à l'accueil</a>`;
+  div.innerHTML = `<p>${data.name} à gagné !</p><a href="/">Retour à l'accueil</a>`;
   document.body.appendChild(div);
 });
 

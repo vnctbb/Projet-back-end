@@ -22,12 +22,29 @@ app.set('view engine', 'pug');
  */
 
 app.get('/', (req, res) => {
-  res.render('landing');
+  res.render('index');
 });
 
 app.post('/lobby', (req, res) => {
   const username = req.body.username;
-  res.render('index', {username : username});
+  let error = false;
+  allPlayer.forEach(player => {
+    if(player.name == req.body.username){
+      error = 'taken';
+    }
+  });
+  if(req.body.username == ''){
+    res.render('index', {error : 'empty'})
+  }
+  if(error){
+    res.render('index', {error : error});
+  } else {
+    res.render('lobby', {username : username});
+  }
+});
+
+app.use( (req, res) => {
+  res.status(404).send('error404');
 });
 
 const server = app.listen(PORT, () => {

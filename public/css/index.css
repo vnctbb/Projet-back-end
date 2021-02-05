@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,700;0,900;1,400&display=swap');
+
+body{
+  color: rgb(59, 59, 59);
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+header{
+  text-align: center;
+}
+
+header > h1{
+  color: #FE9900;
+  font-size: 5em;
+  font-weight: 900;
+}
+
+.fas{
+  color: #FE9900;
+  font-size: 3em;
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  transition-property: font-size color;
+  transition-duration: 1s;
+}
+
+.fas:hover{
+  color: #ffa825;
+  font-size: 4em;
+}
+
+section{
+  text-align: center;
+}
+
+form{
+  margin: 75px;
+  text-align: center;
+}
+
+form div{
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+form input{
+  border-radius: 15px;
+  border: 1px solid lightgray;
+  height: 40px;
+}
+
+form input:first-child{
+  color: rgb(59, 59, 59);
+  font-size: 1.8em;
+  margin-right: 10px;
+  padding-left: 10px;
+  width: 300px;
+}
+
+form input:last-child{
+  cursor: pointer;
+}
+
+form input:last-child:hover{
+  background-color: #cecccc;
+  border: 1px solid #afafaf;
+  cursor: pointer;
+}
+
+.red{
+  color: red;
+}
+
+footer{
+  bottom: 10px;
+  font-size: 0.9em;
+  left: calc(50% - (95% / 2));
+  position: absolute;
+  text-align: right;
+  width: 95%;
+}
+
+footer div:first-child{
+  text-align: center;
+}
+
+footer div:last-child{
+  display: flex;
+  justify-content: space-between;
+}
+
+footer a {
+  color: rgb(59, 59, 59);
+  margin-right: 5px;
+  text-decoration: none;
+}
+
+footer a:hover{
+  color: rgb(14, 13, 13);
+}

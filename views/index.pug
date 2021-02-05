@@ -2,17 +2,32 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Document
+  title Timeline - Le jeu qui vous fait voyager dans le temps !
   script(src="/socket.io/socket.io.min.js")
-  link(rel='stylesheet' href='/css/style.css')
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
+  link(rel='stylesheet' href='/css/index.css')
 body
-  h1 Remettez ces évènements dans l'ordre
-  .board
-    .containers.playerList
-      h2.playerName #{username}
-    .container.reception
-    .otherPlayerList
-script.
-  let username = !{JSON.stringify(username)};
-script(src='/js/functionRepertory.js')
-script(src='/js/script.js')
+  header
+    a(href='#')
+      i.fas.fa-trophy
+    h1 Timeline
+  section
+    h3 Règles du jeu 
+    p L'objectif du jeu est de remettre les cartes représentant des évènements historique dans le bon ordre. Le premier à ne plus avoir de carte à gagner !
+  form(action="/lobby" method="POST") 
+    p Comment veux-tu qu'on t'appelles?
+    div
+      input(type="text" name="username")
+      input(type="submit" value="Rejoindre la salle de jeu")
+    if (error == 'taken')
+      p.red Désolé, ce nom est déja pris !
+    if (error == 'empty')
+      p.red Attention, tu n'as rentré aucun nom !
+  footer
+    div
+      p Vincent Bongrand
+      a(href='https://www.linkedin.com/in/vincentbongrand/' target='blank') Linkedin 
+      a(href='https://github.com/vnctbb' target='blank') GitHub
+    div
+      p inspiré du jeu de société Timeline par Frédéric Henry
+      p Projet back-end Ifocop

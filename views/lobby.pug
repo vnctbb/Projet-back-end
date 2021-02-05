@@ -1,0 +1,26 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Document
+  script(src="/socket.io/socket.io.min.js")
+  link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
+  link(rel='stylesheet' href='/css/style.css')
+body
+  header
+    a(href='#')
+      i.fas.fa-trophy
+    h1 Timeline
+    h3 Remettez ces évènements dans l'ordre
+  .board
+    .containers.playerList
+      h2.playerName #{username}
+    .container.reception
+    .otherPlayerList
+  footer
+    p inspiré du jeu de société Timeline par Frédéric Henry
+    p Projet back-end Ifocop
+script.
+  let username = !{JSON.stringify(username)};
+script(src='/js/functionRepertory.js')
+script(src='/js/script.js')

@@ -4,6 +4,11 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({
+  extended : false
+}));
+
 const PORT = process.env.PORT || 3000;
 
 app.use('/css', express.static(__dirname + '/public/css'));
@@ -17,7 +22,12 @@ app.set('view engine', 'pug');
  */
 
 app.get('/', (req, res) => {
-  res.render('index');
+  res.render('landing');
+});
+
+app.post('/lobby', (req, res) => {
+  const username = req.body.username;
+  res.render('index', {username : username});
 });
 
 const server = app.listen(PORT, () => {
@@ -153,6 +163,23 @@ const ioServer = socketio(server);
 ioServer.on('connection', (socket) => {
   console.log('connexion établie');
 
+  const player = {
+    id : socket.id,
+    name : ' ',
+    hand : giveHand(4),
+    nbOfCard : 4
+  }
+
+  socket.on('saveUsername', (data) => {
+    player.name = data.username;
+    allPlayer.push({
+      id : player.id,
+      name : player.name,
+      hand : player.hand,
+    });
+    socket.broadcast.emit('newPlayer', player);
+  });
+
   socket.on('askForOtherPlayer', () => {
     socket.emit('askForOtherPlayer', allPlayer.slice(0, (allPlayer.length-1)));
   });
@@ -160,36 +187,28 @@ ioServer.on('connection', (socket) => {
   // Faire une route style 'new-player', avec la valeur d'un input pour donner le nom du player,
   // A ce moment là le push dans le tableau,
 
-  const player = {
-    id : socket.id,
-    name : 'Claude',
-    hand : giveHand(4)
-  }
-
-  allPlayer.push({
-    id : socket.id,
-    name : 'Claude',
-    turn : false,
-    hand : player.hand
-  });
-
-  socket.broadcast.emit('newPlayer', player);
-
   socket.emit('giveHand', player);
 
-  ioServer.to(allPlayer[0].id).emit('readyToPlay', {turn : true});
+  //ioServer.emit('notReadyToPlay')
 
-  ioServer.emit('giveOtherPlayersHands', {player : player, allPLayer : allPlayer});
+  //ioServer.to(allPlayer[0].id).emit('readyToPlay');
 
-  socket.on('eventPositionned', (innerHTML) => {
+  socket.on('eventPositionned', (datas) => {
+    if(datas.position){
+      player.nbOfCard -= 1;
+    }
+    console.log(player.nbOfCard);
+    if(player.nbOfCard == 0){
+      ioServer.emit('weHaveAWinner', {name : player.name});
+    };
     const nextPlayer = getNextPlayer(player.id);
-    socket.broadcast.emit('eventPositionned', innerHTML);
-    ioServer.to(player.id).emit("readyToPlay", {turn : false});
-    ioServer.to(nextPlayer).emit("readyToPlay", {turn : true});
+    socket.broadcast.emit('eventPositionned', datas.innerHTML);
+    ioServer.to(player.id).emit("notReadyToPlay");
+    ioServer.to(nextPlayer).emit("readyToPlay");
   });
 
-  socket.on('myEventPosition', (innerHTML) => {
-    socket.broadcast.emit('otherEventPosition', {id : player.id, innerHTML : innerHTML});
+  socket.on('wrongPosition', (innerHTML) => {
+    socket.broadcast.emit('wrongPosition', innerHTML);
   });
 
   socket.on('disconnect', (socket) => {
@@ -205,7 +224,6 @@ ioServer.on('connection', (socket) => {
         allPlayer.splice(index, 1);
       }
     });
-    ioServer.emit('playerDisconnect', player.id);
   });
 
 });

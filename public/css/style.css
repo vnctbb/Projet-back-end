@@ -17,7 +17,8 @@ body {
 
 .container,
 .containers,
-.notContainers{
+.notContainers,
+.otherPlayerList{
   background-color: #333;
   padding: 1rem;
   margin: 1rem;
@@ -36,6 +37,21 @@ body {
   padding: 1rem;
   background-color: white;
   border: 1px solid black;
+}
+
+.winnerMenu{
+  background-color: yellow;
+  font-size: 1.5em;
+  height: 300px;
+  left: calc(50% - 200px);
+  position: absolute;
+  text-align: center;
+  top: 150px;
+  width: 400px;
+}
+
+.winnerMenu > p{
+  margin: 50px;
 }
 
 .player{

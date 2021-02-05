@@ -9,6 +9,10 @@ body
   h1 Remettez ces évènements dans l'ordre
   .board
     .containers.playerList
+      h2.playerName #{username}
     .container.reception
+    .otherPlayerList
+script.
+  let username = !{JSON.stringify(username)};
 script(src='/js/functionRepertory.js')
 script(src='/js/script.js')

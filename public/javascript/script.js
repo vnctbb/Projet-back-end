@@ -15,7 +15,6 @@ socket.on('connect', (req, res) => {
   
   socket.on('askForOtherPlayer', (allPlayer) => {
     allPlayer.forEach(player => {
-      console.log(player);
       const h2 = document.createElement('h2');
       h2.className = 'playerName';
       h2.innerText = player.name;
@@ -25,7 +24,6 @@ socket.on('connect', (req, res) => {
 });
 
 socket.on('newPlayer', (player) => {
-  console.log(player);
   const h2 = document.createElement('h2');
   h2.className = 'playerName';
   h2.innerText = player.name;
@@ -49,22 +47,23 @@ socket.on('giveHand', (player) => {
       draggable.classList.remove('dragging');
       draggable.classList.add('last-dragged');
       const checkingPosition = getPositionLastDragged();
-      console.log(checkingPosition);
-      const orderListEvent = document.querySelector('.reception').innerHTML;
-      socket.emit('eventPositionned', {innerHTML : orderListEvent});
-      const listMyEvent = document.querySelector('.container').innerHTML;
-      if(checkingPosition === true){
-        //draggable.draggable = false; // aussi changer les draggable to not draggable
+      if(draggable.parentNode.className === 'container reception'){
         const orderListEvent = document.querySelector('.reception').innerHTML;
-        socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
-      } else {
-        setTimeout(() => {
-          draggable.draggable = true;
-          const container = document.querySelector('.player');
-          container.appendChild(draggable);
-          const order = document.querySelector('.reception').innerHTML;
-          socket.emit('wrongPosition', order);
-        }, 500);
+        socket.emit('eventPositionned', {innerHTML : orderListEvent});
+        const listMyEvent = document.querySelector('.container').innerHTML;
+        if(checkingPosition === true){
+          //draggable.draggable = false; // aussi changer les draggable to not draggable
+          const orderListEvent = document.querySelector('.reception').innerHTML;
+          socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
+        } else {
+          setTimeout(() => {
+            draggable.draggable = true;
+            const container = document.querySelector('.player');
+            container.appendChild(draggable);
+            const order = document.querySelector('.reception').innerHTML;
+            socket.emit('wrongPosition', order);
+          }, 500);
+        }
       }
     });
   });
@@ -84,7 +83,6 @@ socket.on('giveHand', (player) => {
   
   
   function getDragAfterElement(container, y) {
-    console.log('ici');
     const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
   
     return draggableElements.reduce((closest, child) => {
@@ -99,7 +97,6 @@ socket.on('giveHand', (player) => {
   };
   
   function getPositionLastDragged() {
-    console.log('la');
     const container = document.querySelector('.reception')
     const draggableInOrder = [...container.getElementsByClassName('draggable')];
     let returnValue = true;
@@ -134,7 +131,6 @@ socket.on('wrongPosition', (innerHTML) => {
 });
 
 socket.on('weHaveAWinner', (data) => {
-  console.log('win');
   const div = document.createElement('div');
   div.className = 'winnerMenu'
   div.innerHTML = `<p>${data.name} à gagné !</p><a href="/">Retour à l'accueil</a>`;

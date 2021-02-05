@@ -20,8 +20,8 @@ header > h1{
   color: #FE9900;
   font-size: 3em;
   position: absolute;
-  right: 40px;
-  top: 40px;
+  right: 35px;
+  top: 35px;
   transition-property: font-size color;
   transition-duration: 1s;
 }
@@ -90,6 +90,7 @@ footer div:first-child{
 footer div:last-child{
   display: flex;
   justify-content: space-between;
+  text-align: center;
 }
 
 footer a {

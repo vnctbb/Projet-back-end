@@ -15,6 +15,10 @@ body {
   color: green;
 }
 
+.gray{
+  color: rgb(59, 59, 59);
+}
+
 header{
   text-align: center;
 }
@@ -79,9 +83,23 @@ header > a > .fas:hover{
   min-height: 300px;
 }
 
+.playerList{
+  text-align: center;
+}
+
+.playerList > div:first-of-type{
+  align-items: center;
+  display: flex;
+  justify-content: space-around;
+}
+
 .player{
   border: none;
   margin: 0px;
+}
+
+.avatar{
+  width: 150px;
 }
 
 .reception{
@@ -91,6 +109,14 @@ header > a > .fas:hover{
 .playerList,
 .otherPlayerList{
   width: 25%;
+}
+
+.otherPlayerList > div{
+  display: flex;
+}
+
+.otherPlayerList > div > div{
+  display: unset;
 }
 
 .draggable{
@@ -139,6 +165,102 @@ header > a > .fas:hover{
 
 .draggable.dragging{
   opacity : 0.5;
+}
+
+.menuPartie{
+  background-color: #72A1E5;
+  color: #FFF;
+  height: 100%;
+  overflow-y: scroll;
+  position: fixed;
+  right: -600px;
+  top: 0px;
+  width: 595px;
+  z-index: 2;
+}
+
+.menuPartie > div{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuPartie .cross{
+  cursor: pointer;
+  font-size: 2em;
+  margin-left: 25px;
+}
+
+.menuPartie h2{
+  font-size: 2em;
+  margin-right: 25px;
+}
+
+.come{
+  right: 0;
+  animation-duration: 2s;
+  animation-name: slidein;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes slidein {
+  from {
+    right: -600px;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+.back{
+  animation-duration: 2s;
+  animation-name: slideback;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes slideback {
+  from {
+    right: 0px;
+  }
+
+  to {
+    right: -600px;
+  }
+}
+
+.exposeGame{
+  display: flex;
+  flex-flow: column;
+}
+
+.oneGame{
+  background-color: #FFF;
+  border-radius: 15px;
+  color: #FE9900;
+  height: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 80%;
+}
+
+.oneGame div:first-child{
+  display: flex;
+  justify-content: space-between;
+}
+
+.nameWinner{
+  font-size: 2em;
+}
+
+.oneGame li{
+  list-style-type: none;
+  margin: 5px;
+}
+
+.oneGame li:first-child{
+  margin-top: 15px;
 }
 
 footer{

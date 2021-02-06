@@ -12,17 +12,38 @@ body
       i.fas.fa-trophy
     h1 Timeline
   section
-    h3 Règles du jeu 
+    h2 Règles du jeu 
     p L'objectif du jeu est de remettre les cartes représentant des évènements historique dans le bon ordre. Le premier à ne plus avoir de carte à gagner !
   form(action="/lobby" method="POST") 
-    p Comment veux-tu qu'on t'appelles?
+    p Choisis un nom et un avatar avant de commencer
     div
-      input(type="text" name="username" minlength=3 maxlength=40)
-      input(type="submit" value="Rejoindre la salle de jeu")
+      each avatar in personnage 
+        div.personnage
+          img(src=`/img/avatar/${avatar}.png`, alt=`${avatar}`)
+          input(type="radio" name='personnage' id=`${avatar}` value=`${avatar}` required)
+    input(type="text" name="username" minlength=3 maxlength=40)
+    input(type="submit" value="Rejoindre la salle de jeu")
     if (error == 'taken')
       p.red Désolé, ce nom est déja pris !
     if (error == 'empty')
       p.red Attention, tu n'as rentré aucun nom !
+    if (error == 'emptyAvatar')
+      p.red Attention, tu n'as pas sélectionné d'avatar !
+  div.menuPartie
+    div
+      i.fas.fa-times.cross
+      h2 Dernières parties
+    div.exposeGame
+      each game in previousGame
+        div.oneGame
+          div.gray
+            p #{game.dateFormat} - #{game.durationFormat}
+            p Joueurs : #{game.nbOfPlayers}
+          p.gray Vainqueur :
+          p.nameWinner #{game.winner.name} avec #{game.winner.points} points
+          ul.gray Liste complète des joueurs :
+            each player in game.listOfPlayers
+              li #{player.name} - #{player.points} points
   footer
     div
       p Vincent Bongrand
@@ -31,3 +52,4 @@ body
     div
       p inspiré du jeu de société Timeline par Frédéric Henry
       p Projet back-end Ifocop
+script(src='/js/previousGame-script.js')

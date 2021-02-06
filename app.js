@@ -9,11 +9,17 @@ app.use(bodyParser.urlencoded({
   extended : false
 }));
 
+const MongoClient = require('mongodb').MongoClient;
+const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority';
+const nameDb = 'timeline';
+const collectionGames = 'previousGame';
+const collectionEvents = 'eventList'
+
 const PORT = process.env.PORT || 3000;
 
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/js', express.static(__dirname + '/public/javascript'));
-app.use('/img', express.static(__dirname + '/public/img'));
+app.use('/img', express.static(__dirname + '/public/images'));
 
 app.set('view engine', 'pug');
 
@@ -21,26 +27,87 @@ app.set('view engine', 'pug');
  * Serveur HTTP
  */
 
+ const addZero = (number) => {
+  if(number < 10){
+    const numberString = number.toString();
+    number = `0${numberString}`;
+    return number;
+  } else {
+    return number
+  }
+ };
+
+const getDate = (uneDate) => {
+  const jour = addZero(uneDate.getDay());
+  const mois = addZero(uneDate.getMonth());
+  const année = uneDate.getFullYear();
+  const heure = addZero(uneDate.getHours());
+  const minutes = addZero(uneDate.getMinutes());
+  const format = `le ${jour}/${mois}/${année} à ${heure}h${minutes}`;
+  return format;
+};
+
+const getDuration = (uneDate, deuxDate) => {
+  let ecart = uneDate.getTime() - deuxDate.getTime();
+    ecart = - ecart;
+
+  let mi = Math.floor(ecart / 60000) % 60;
+  let s = Math.floor(ecart / 1000) % 60;
+
+  if(mi < 10){mi = '0' + mi};
+  if(s < 10){s = '0' + s};
+
+  return  mi + 'min ' + s + 's';
+};
+
 app.get('/', (req, res) => {
-  res.render('index');
+  const personnage = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+  MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
+    if(err) throw err;
+    const collection = client.db(nameDb).collection(collectionGames);
+    collection.find().toArray((err, data) => {
+      if(err) throw err;
+      data.forEach(game => {
+        game.dateFormat = getDate(game.date);
+        game.durationFormat = getDuration(game.date, game.duration);
+      });
+      res.render('index',{previousGame : data, personnage : personnage});
+    });
+  });
 });
 
 app.post('/lobby', (req, res) => {
   const username = req.body.username;
+  const avatar = req.body.personnage;
+  const personnage = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
   let error = false;
-  allPlayer.forEach(player => {
-    if(player.name == req.body.username){
-      error = 'taken';
-    }
+    MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
+      if(err) throw err;
+      const collection = client.db(nameDb).collection(collectionGames);
+      collection.find().toArray((err, data) => {
+        if(err) throw err;
+        data.forEach(game => {
+          game.dateFormat = getDate(game.date);
+          game.durationFormat = getDuration(game.date, game.duration);
+        });
+        allPlayer.forEach(player => {
+          if(player.name == username){
+            error = 'taken';
+          }
+        });
+        if(username == ''){
+          res.render('index', {error : 'empty', previousGame : data, personnage : personnage})
+        }
+        if(!personnage.indexOf(avatar) < 0){
+          res.render('index', {error : 'emptyAvatar', previousGame : data, personnage : personnage})
+        }
+        if(error){
+          res.render('index', {error : error, previousGame : data, personnage : personnage});
+        } else {
+          res.render('lobby', {username : username, avatar : avatar, previousGame : data});
+      };
+    });
   });
-  if(req.body.username == ''){
-    res.render('index', {error : 'empty'})
-  }
-  if(error){
-    res.render('index', {error : error});
-  } else {
-    res.render('lobby', {username : username});
-  }
 });
 
 app.use( (req, res) => {
@@ -173,6 +240,22 @@ function getNextPlayer (id) {
 
 const allPlayer = [];
 
+const game = {
+	date: 0,
+	duration: 0,
+	nbOfPlayers: 0,
+	ListOfPlayers: [
+		{
+		name: '',
+		points: 0,		
+		},
+	],
+	winner: {
+		name: '',
+		points: 0,
+	}
+}
+
 let gameIsRunning = false;
 
 const socketio = require('socket.io');
@@ -193,11 +276,15 @@ ioServer.on('connection', (socket) => {
 
   socket.on('saveUsername', (data) => {
     player.name = data.username;
+    player.avatar = data.avatar;
+    console.log(data.avatar)
     allPlayer.push({
       id : player.id,
+      avatar : player.avatar,
       name : player.name,
       hand : player.hand,
-      ready : false
+      ready : false,
+      points : player.points
     });
     socket.broadcast.emit('newPlayer', player);
   });
@@ -231,6 +318,8 @@ ioServer.on('connection', (socket) => {
     // return everybodyReady;
     if(everybodyReady === true){
       gameIsRunning = true;
+      game.date = new Date();
+      game.nbOfPlayers = allPlayer.length;
       ioServer.emit('startGaming', {firstPlayer : allPlayer[0]});
       ioServer.to(allPlayer[0].id).emit("readyToPlay", {firstPlayer : true});
     }
@@ -244,15 +333,30 @@ ioServer.on('connection', (socket) => {
     if(datas.position){
       player.nbOfCard -= 1;
       player.points += 100 * player.streaks;
-      player.streaks += 0.5;
+      player.streaks += 0.2;
     }
-    if(player.nbOfCard == 0){
+    if(player.nbOfCard == 0 && player.points > 400){
       ioServer.emit('weHaveAWinner', player);
+      game.winner.name = player.name;
+      game.winner.points = player.points;
+      game.duration = new Date();
+      game.listOfPlayers = allPlayer;
+      MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
+        if(err) throw err;
+        const collection = client.db(nameDb).collection(collectionGames);
+        collection.insertOne(game, (err, res) => {
+          if(err) throw err;
+          console.log('Game saved in DataBase');
+          client.close();
+        });
+      });
     };
     const nextPlayer = getNextPlayer(player.id);
     socket.broadcast.emit('eventPositionned', datas.innerHTML);
     ioServer.to(player.id).emit("notReadyToPlay");
     ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
+    allPlayer[getIndexInAllPlayer(player.id)].points = player.points;
+    console.log(allPlayer);
     ioServer.emit('whoNeedToPlay', {nextPlayer : nextPlayer, player : player}); //changer nom variable player = ancien player pour les points 
   });
 

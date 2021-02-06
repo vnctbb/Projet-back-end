@@ -16,7 +16,15 @@ header > h1{
   font-weight: 900;
 }
 
-.fas{
+.red{
+  color: red;
+}
+
+.gray{
+  color: rgb(59, 59, 59);
+}
+
+.fa-trophy{
   color: #FE9900;
   font-size: 3em;
   position: absolute;
@@ -26,7 +34,7 @@ header > h1{
   transition-duration: 1s;
 }
 
-.fas:hover{
+.fa-trophy:hover{
   color: #ffa825;
 }
 
@@ -39,9 +47,10 @@ form{
   text-align: center;
 }
 
-form div{
+form{
   align-items: center;
   display: flex;
+  flex-flow: column wrap;
   justify-content: center;
 }
 
@@ -51,10 +60,25 @@ form input{
   height: 40px;
 }
 
-form input:first-child{
+form > div {
+  display: flex;
+  margin: 20px;
+}
+
+.personnage{
+  align-items: center;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.personnage img{
+  width: 100px;
+}
+
+form input:nth-child(3){
   color: rgb(59, 59, 59);
   font-size: 1.8em;
-  margin-right: 10px;
+  margin-bottom: 20px;
   padding-left: 10px;
   width: 300px;
 }
@@ -69,15 +93,106 @@ form input:last-child:hover{
   cursor: pointer;
 }
 
-.red{
-  color: red;
+.menuPartie{
+  background-color: #72A1E5;
+  color: #FFF;
+  height: 100%;
+  overflow-y: scroll;
+  position: fixed;
+  right: -600px;
+  top: 0px;
+  width: 595px;
+  z-index: 2;
+}
+
+.menuPartie > div{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuPartie .fa-times{
+  cursor: pointer;
+  font-size: 2em;
+  margin-left: 25px;
+}
+
+.menuPartie h2{
+  font-size: 2em;
+  margin-right: 25px;
+}
+
+.come{
+  right: 0;
+  animation-duration: 2s;
+  animation-name: slidein;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes slidein {
+  from {
+    right: -600px;
+  }
+
+  to {
+    right: 0;
+  }
+}
+
+.back{
+  animation-duration: 2s;
+  animation-name: slideback;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes slideback {
+  from {
+    right: 0px;
+  }
+
+  to {
+    right: -600px;
+  }
+}
+
+.exposeGame{
+  display: flex;
+  flex-flow: column;
+}
+
+.oneGame{
+  background-color: #FFF;
+  border-radius: 15px;
+  color: #FE9900;
+  height: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 80%;
+}
+
+.oneGame div:first-child{
+  display: flex;
+  justify-content: space-between;
+}
+
+.nameWinner{
+  font-size: 2em;
+}
+
+.oneGame li{
+  list-style-type: none;
+  margin: 5px;
+}
+
+.oneGame li:first-child{
+  margin-top: 15px;
 }
 
 footer{
   bottom: 10px;
   font-size: 0.9em;
   left: calc(50% - (95% / 2));
-  position: absolute;
   text-align: right;
   width: 95%;
 }

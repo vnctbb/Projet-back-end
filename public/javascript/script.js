@@ -9,7 +9,7 @@ const socket = io();
 socket.on('connect', (req, res) => {
   console.log('connection établie');
 
-  socket.emit('saveUsername', {username : username});
+  socket.emit('saveUsername', {username : username, avatar : avatar});
 
   socket.emit('askForOtherPlayer');
   
@@ -17,13 +17,22 @@ socket.on('connect', (req, res) => {
     allPlayer.forEach(player => {
       const div = document.createElement('div');
       div.id = player.id;
+      const sousDiv = document.createElement('div');
+      const sousDivDeux = document.createElement('div');
+      const img = document.createElement('img');
+      img.src = `/img/avatar/${player.avatar}.png`;
+      img.style.width = '100px';
       const h3 = document.createElement('h3');
       h3.className = 'playerName';
       h3.innerText = player.name;
       const p = document.createElement('p');
+      p.className = 'playerPoints';
       p.innerText = 'Points : ';
-      div.appendChild(h3);
-      div.appendChild(p);
+      div.appendChild(sousDiv);
+      div.appendChild(sousDivDeux);
+      sousDiv.appendChild(img);
+      sousDivDeux.appendChild(h3);
+      sousDivDeux.appendChild(p);
       document.querySelector('.otherPlayerList').appendChild(div);
     });
   });
@@ -50,13 +59,22 @@ button.addEventListener('click', () => {
 socket.on('newPlayer', (player) => {
   const div = document.createElement('div');
   div.id = player.id;
+  const sousDiv = document.createElement('div');
+  const sousDivDeux = document.createElement('div');
+  const img = document.createElement('img');
+  img.src = `/img/avatar/${player.avatar}.png`;
+  img.style.width = '100px';
   const h3 = document.createElement('h3');
   h3.className = 'playerName';
   h3.innerText = player.name;
   const p = document.createElement('p');
+  p.className = 'playerPoints';
   p.innerText = 'Points : ';
-  div.appendChild(h3);
-  div.appendChild(p);
+  div.appendChild(sousDiv);
+  div.appendChild(sousDivDeux);
+  sousDiv.appendChild(img);
+  sousDivDeux.appendChild(h3);
+  sousDivDeux.appendChild(p);
   document.querySelector('.otherPlayerList').appendChild(div);
 });
 
@@ -168,7 +186,8 @@ socket.on('notReadyToPlay', (data) => {
 
 socket.on('whoNeedToPlay', (data) => {
   document.querySelector('h2').innerText = `${data.nextPlayer.name} c'est ton tour de jouer !`;
-  console.log(data);
+  const div = document.getElementById(`${data.player.id}`);
+  div.querySelector('.playerPoints').innerText = `Points : ${data.player.points}`;
 });
 
 socket.on('eventPositionned', (innerHTML) => {

@@ -1,6 +1,6 @@
 const renderPlayer = (player, draggable, firstClass, secondClass, thirdClass) => {
+  document.querySelector('.playerList').id = player.id;
   const newPlayer = document.createElement('div');
-  newPlayer.id = player.id;
   newPlayer.classList.add(firstClass, secondClass);
   player.hand.forEach((card, index) => {
     const newCard = document.createElement('p');

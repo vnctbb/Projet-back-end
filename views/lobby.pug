@@ -2,7 +2,7 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Document
+  title Timeline - Lobby - Le jeuTimeline - Le jeu qui vous fait voyager dans le temps !
   script(src="/socket.io/socket.io.min.js")
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
   link(rel='stylesheet' href='/css/style.css')
@@ -14,17 +14,36 @@ body
     h2 En attente d'autre joueurs...
   .board
     .containers.playerList
-      h3.playerName #{username}
-      p Points :
+      img(src=`/img/avatar/${avatar}.png`).avatar
+      div
+        h3.playerName #{username}
+        p.playerPoints Points :
       div.status
         button.buttonReady Prêt à jouer?
         i.fas.fa-times.red
     .container.reception
     .otherPlayerList
+  div.menuPartie
+    div
+      i.fas.fa-times.cross
+      h2 Dernières parties
+    div.exposeGame
+      each game in previousGame
+        div.oneGame
+          div.gray
+            p #{game.dateFormat} - #{game.durationFormat}
+            p Joueurs : #{game.nbOfPlayers}
+          p.gray Vainqueur :
+          p.nameWinner #{game.winner.name} avec #{game.winner.points} points
+          ul.gray Liste complète des joueurs :
+            each player in game.listOfPlayers
+              li #{player.name} - #{player.points} points
   footer
     p inspiré du jeu de société Timeline par Frédéric Henry
     p Projet back-end Ifocop
 script.
   let username = !{JSON.stringify(username)};
+  let avatar = !{JSON.stringify(avatar)};
 script(src='/js/functionRepertory.js')
+script(src='/js/previousGame-script.js')
 script(src='/js/script.js')

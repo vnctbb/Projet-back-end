@@ -11,10 +11,14 @@ body
     a(href='#')
       i.fas.fa-trophy
     h1 Timeline
-    h3 Remettez ces évènements dans l'ordre
+    h2 En attente d'autre joueurs...
   .board
     .containers.playerList
-      h2.playerName #{username}
+      h3.playerName #{username}
+      p Points :
+      div.status
+        button.buttonReady Prêt à jouer?
+        i.fas.fa-times.red
     .container.reception
     .otherPlayerList
   footer

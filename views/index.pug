@@ -17,7 +17,7 @@ body
   form(action="/lobby" method="POST") 
     p Comment veux-tu qu'on t'appelles?
     div
-      input(type="text" name="username")
+      input(type="text" name="username" minlength=3 maxlength=40)
       input(type="submit" value="Rejoindre la salle de jeu")
     if (error == 'taken')
       p.red Désolé, ce nom est déja pris !

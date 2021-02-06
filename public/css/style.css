@@ -4,6 +4,15 @@ body {
   color: rgb(59, 59, 59);
   font-family: 'Robot', sans-serif;
   margin: 0;
+  user-select: none;
+}
+
+.red{
+  color: red;
+}
+
+.green{
+  color: green;
 }
 
 header{
@@ -16,19 +25,18 @@ header > h1{
   font-weight: 900;
 }
 
-.fas{
+header > a > .fas{
   color: #FE9900;
   font-size: 3em;
   position: absolute;
   right: 40px;
   top: 40px;
-  transition-property: font-size color;
+  transition-property: color;
   transition-duration: 1s;
 }
 
-.fas:hover{
+header > a > .fas:hover{
   color: #ffa825;
-  font-size: 4em;
 }
 
 .board{
@@ -37,10 +45,27 @@ header > h1{
 
 .playerName{
   color: rgb(59, 59, 59);
+  font-size: 1.5em;
 }
 
-.red{
-  color: red;
+.status{
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.status > button{
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 30px;
+  padding: 0px 10px;
+}
+
+.status > .fas{
+  font-size: 1.5em;
+  margin: 0 10px;
 }
 
 .container,
@@ -80,18 +105,20 @@ header > h1{
 .notDraggable{
   padding: 1rem;
   background-color: white;
-  border: 1px solid black;
+  border-radius: 15px;
+  border: 1px solid rgb(59, 59, 59);
+  font-size: 0.8em;
 }
 
 .winnerMenu{
   background-color: rgba(59, 59, 59, 0.8);;
   border-radius: 15px;
   font-size: 1.5em;
-  height: 300px;
+  height: 400px;
   left: calc(50% - 250px);
   position: absolute;
   text-align: center;
-  top: 150px;
+  top: 300px;
   width: 500px;
 }
 

@@ -161,9 +161,9 @@ function getIndexInAllPlayer (id) {
 function getNextPlayer (id) {
   const index = getIndexInAllPlayer(id);
   if(index == allPlayer.length - 1){
-    return allPlayer[0].id;
+    return allPlayer[0];
   } else {
-    return allPlayer[index+1].id;
+    return allPlayer[index+1];
   }
 }
 
@@ -172,6 +172,8 @@ function getNextPlayer (id) {
 */
 
 const allPlayer = [];
+
+let gameIsRunning = false;
 
 const socketio = require('socket.io');
 
@@ -184,7 +186,9 @@ ioServer.on('connection', (socket) => {
     id : socket.id,
     name : ' ',
     hand : giveHand(4),
-    nbOfCard : 4
+    nbOfCard : 4,
+    streaks : 1,
+    points : 0,
   }
 
   socket.on('saveUsername', (data) => {
@@ -193,6 +197,7 @@ ioServer.on('connection', (socket) => {
       id : player.id,
       name : player.name,
       hand : player.hand,
+      ready : false
     });
     socket.broadcast.emit('newPlayer', player);
   });
@@ -206,6 +211,31 @@ ioServer.on('connection', (socket) => {
 
   socket.emit('giveHand', player);
 
+  ioServer.emit("notReadyToPlay");
+
+  socket.on('playerIsReady', () => {
+    allPlayer.forEach(Oneplayer => {
+      if(Oneplayer.id == player.id){
+        Oneplayer.ready = true;
+      }
+    });
+    let everybodyReady = true;
+    allPlayer.forEach(player => {
+      if(player.ready === false ){
+        everybodyReady = false;
+      }
+    });
+    if(allPlayer.length <= 1){
+      everybodyReady = false;
+    }
+    // return everybodyReady;
+    if(everybodyReady === true){
+      gameIsRunning = true;
+      ioServer.emit('startGaming', {firstPlayer : allPlayer[0]});
+      ioServer.to(allPlayer[0].id).emit("readyToPlay", {firstPlayer : true});
+    }
+  });
+
   //ioServer.emit('notReadyToPlay')
 
   //ioServer.to(allPlayer[0].id).emit('readyToPlay');
@@ -213,18 +243,22 @@ ioServer.on('connection', (socket) => {
   socket.on('eventPositionned', (datas) => {
     if(datas.position){
       player.nbOfCard -= 1;
+      player.points += 100 * player.streaks;
+      player.streaks += 0.5;
     }
-    console.log(player.nbOfCard);
     if(player.nbOfCard == 0){
-      ioServer.emit('weHaveAWinner', {name : player.name});
+      ioServer.emit('weHaveAWinner', player);
     };
     const nextPlayer = getNextPlayer(player.id);
     socket.broadcast.emit('eventPositionned', datas.innerHTML);
     ioServer.to(player.id).emit("notReadyToPlay");
-    ioServer.to(nextPlayer).emit("readyToPlay");
+    ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
+    ioServer.emit('whoNeedToPlay', {nextPlayer : nextPlayer, player : player}); //changer nom variable player = ancien player pour les points 
   });
 
   socket.on('wrongPosition', (innerHTML) => {
+    player.streak = 0;
+    player.points -= 50;
     socket.broadcast.emit('wrongPosition', innerHTML);
   });
 
@@ -241,6 +275,11 @@ ioServer.on('connection', (socket) => {
         allPlayer.splice(index, 1);
       }
     });
+    if(gameIsRunning){
+      ioServer.emit('onePlayerIsGone', {name : player.name, running : true});
+    } else {
+      ioServer.emit('onePlayerIsGone', {id : player.name, running : false, id : player.id});
+    }
   });
 
 });

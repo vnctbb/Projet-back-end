@@ -15,19 +15,49 @@ socket.on('connect', (req, res) => {
   
   socket.on('askForOtherPlayer', (allPlayer) => {
     allPlayer.forEach(player => {
-      const h2 = document.createElement('h2');
-      h2.className = 'playerName';
-      h2.innerText = player.name;
-      document.querySelector('.otherPlayerList').appendChild(h2);
+      const div = document.createElement('div');
+      div.id = player.id;
+      const h3 = document.createElement('h3');
+      h3.className = 'playerName';
+      h3.innerText = player.name;
+      const p = document.createElement('p');
+      p.innerText = 'Points : ';
+      div.appendChild(h3);
+      div.appendChild(p);
+      document.querySelector('.otherPlayerList').appendChild(div);
     });
   });
 });
 
+const button = document.querySelector('.buttonReady');
+const fasTimes = document.querySelector('.fa-times');
+
+button.addEventListener('click', () => {
+  if(button.innerText == 'Prêt à jouer?'){
+    button.innerText = 'Prêt !';
+    fasTimes.classList.remove('fa-times', 'red');
+    fasTimes.classList.add('fa-check', 'green');
+    socket.emit('playerIsReady');
+  } else {
+    console.log('ici');
+    button.innerText = 'Prêt à jouer?';
+    fasTimes.classList.remove('fa-check', 'green');
+    fasTimes.classList.add('fa-times', 'red');
+    socket.emit('playerIsNotReady');
+  }
+});
+
 socket.on('newPlayer', (player) => {
-  const h2 = document.createElement('h2');
-  h2.className = 'playerName';
-  h2.innerText = player.name;
-  document.querySelector('.otherPlayerList').appendChild(h2);
+  const div = document.createElement('div');
+  div.id = player.id;
+  const h3 = document.createElement('h3');
+  h3.className = 'playerName';
+  h3.innerText = player.name;
+  const p = document.createElement('p');
+  p.innerText = 'Points : ';
+  div.appendChild(h3);
+  div.appendChild(p);
+  document.querySelector('.otherPlayerList').appendChild(div);
 });
 
 socket.on('giveHand', (player) => {
@@ -50,14 +80,13 @@ socket.on('giveHand', (player) => {
       if(draggable.parentNode.className === 'container reception'){
         const orderListEvent = document.querySelector('.reception').innerHTML;
         socket.emit('eventPositionned', {innerHTML : orderListEvent});
-        const listMyEvent = document.querySelector('.container').innerHTML;
         if(checkingPosition === true){
-          //draggable.draggable = false; // aussi changer les draggable to not draggable
+          draggable.draggable = false;
+          console.log(draggable.draggable);
           const orderListEvent = document.querySelector('.reception').innerHTML;
           socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
         } else {
           setTimeout(() => {
-            draggable.draggable = true;
             const container = document.querySelector('.player');
             container.appendChild(draggable);
             const order = document.querySelector('.reception').innerHTML;
@@ -111,15 +140,35 @@ socket.on('giveHand', (player) => {
 });
 
 socket.on('readyToPlay', (data) => {
-  draggables.forEach(draggable => {
-    draggable.draggable = true;
-  });
+  if(data.firstPlayer){
+    setTimeout(() => {
+      draggables = document.querySelectorAll('.draggable');
+      draggables.forEach(draggable => {
+        if(draggable.parentNode.className === 'player container'){
+          draggable.draggable = true;
+        }
+      });
+    }, 5000);
+  } else {
+    draggables = document.querySelectorAll('.draggable');
+    draggables.forEach(draggable => {
+      if(draggable.parentNode.className === 'player container'){
+        draggable.draggable = true;
+      }
+    });
+  }
 });
 
 socket.on('notReadyToPlay', (data) => {
+  draggables = document.querySelectorAll('.draggable');
   draggables.forEach(draggable => {
     draggable.draggable = false;
   });
+});
+
+socket.on('whoNeedToPlay', (data) => {
+  document.querySelector('h2').innerText = `${data.nextPlayer.name} c'est ton tour de jouer !`;
+  console.log(data);
 });
 
 socket.on('eventPositionned', (innerHTML) => {
@@ -133,8 +182,37 @@ socket.on('wrongPosition', (innerHTML) => {
 socket.on('weHaveAWinner', (data) => {
   const div = document.createElement('div');
   div.className = 'winnerMenu'
-  div.innerHTML = `<p>${data.name} à gagné !</p><a href="/">Retour à l'accueil</a>`;
+  div.innerHTML = `<p>${data.name} à gagné à la partie!</p><p>${data.points} points</p><a href="/">Retour à l'accueil</a>`;
   document.body.appendChild(div);
+});
+
+socket.on('startGaming', (data) => {
+  button.disabled = true;
+  let secondes = 5;
+  const interval = setInterval(() => {
+    document.querySelector('h2').innerText = `Lancement de la partie dans ${secondes} secondes`;
+    secondes -= 1;
+  }, 1000);
+  window.setTimeout(() => {
+    clearInterval(interval);
+    document.querySelector('h2').innerText = `C'est parti ! ${data.firstPlayer.name} c'est à toi de jouer`;
+  }, 6000);
+});
+
+socket.on('onePlayerIsGone', (data) => {
+  if(data.running){
+    const affichage = document.querySelector('.winnerMenu');
+    if(!affichage){
+      const div = document.createElement('div');
+      div.className = 'winnerMenu'
+      div.innerHTML = `<p>${data.name} à quitté la partie!</p><a href="/">Retour à l'accueil</a>`;
+      document.body.appendChild(div);
+    }
+  } else {
+    const id = `${data.id}`
+    const child = document.getElementById(id);
+    child.remove();
+  }
 });
 
 /**

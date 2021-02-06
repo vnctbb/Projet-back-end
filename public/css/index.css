@@ -22,13 +22,12 @@ header > h1{
   position: absolute;
   right: 35px;
   top: 35px;
-  transition-property: font-size color;
+  transition-property: color;
   transition-duration: 1s;
 }
 
 .fas:hover{
   color: #ffa825;
-  font-size: 4em;
 }
 
 section{

@@ -99,7 +99,7 @@ app.post('/lobby', (req, res) => {
           res.render('index', {error : 'empty', previousGame : data, personnage : personnage})
         }
         if(!personnage.indexOf(avatar) < 0){
-          res.render('index', {error : 'emptyAvatar', previousGame : data, personnage : personnage})
+          res.render('index', {error : 'empty', previousGame : data, personnage : personnage})
         }
         if(error){
           res.render('index', {error : error, previousGame : data, personnage : personnage});
@@ -124,71 +124,83 @@ const server = app.listen(PORT, () => {
 
 const dataBase = [
   {
+    id : 12,
     titre : 'Apparition des abeilles',
     date : -1000000,
     given : false
   },
   {
+    id : 13,
     titre : 'Premier village',
     date : -10000,
     given : false
   }
   ,
   {
+    id : 14,
     titre : 'Création de la NBA',
     date : 1946,
     given : false
   }
   ,
   {
+    id : 15,
     titre : 'Création de Facebook',
     date : 2004,
     given : false
   }
   ,
   {
+    id : 16,
     titre : 'Sortie du premier Star Wars',
     date : 1981,
     given : false
   }
   ,
   {
+    id : 17,
     titre : 'Apparition de la fourchette',
     date : 972,
     given : false
   }
   ,
   {
+    id : 18,
     titre : 'Invention de la boite de conserve',
     date : 1810,
     given : false
   }
   ,
   {
+    id : 19,
     titre : 'Invention du vin',
     date : -6000,
     given : false
   }
   ,
   {
+    id : 20,
     titre : 'Naissance du Hip-Hop',
     date : 1974,
     given : false
   }
   ,
   {
+    id : 21,
     titre : 'Domestication du chat',
     date : -4500,
     given : false
   }
   ,
   {
+    id : 22,
     titre : 'Apparition du croissant',
     date : 1683,
     given : false
   }
   ,
   {
+    id : 23,
     titre : 'Découverte du mouvement des planètes',
     date : 1513,
     given : false
@@ -209,8 +221,13 @@ function giveHand (nbOfCardNeeded) {
       }
     }
     dataBase[index].given = true;
+    allCardGiven.push(dataBase[index]);
     const item = dataBase[index];
-    hand.push(item);
+    const infoGiven = {
+      id : item.id,
+      titre : item.titre
+    }
+    hand.push(infoGiven);
   };
   return hand;
 };
@@ -239,6 +256,8 @@ function getNextPlayer (id) {
 */
 
 const allPlayer = [];
+
+const allCardGiven = [];
 
 const game = {
 	date: 0,
@@ -277,7 +296,6 @@ ioServer.on('connection', (socket) => {
   socket.on('saveUsername', (data) => {
     player.name = data.username;
     player.avatar = data.avatar;
-    console.log(data.avatar)
     allPlayer.push({
       id : player.id,
       avatar : player.avatar,
@@ -356,8 +374,28 @@ ioServer.on('connection', (socket) => {
     ioServer.to(player.id).emit("notReadyToPlay");
     ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
     allPlayer[getIndexInAllPlayer(player.id)].points = player.points;
-    console.log(allPlayer);
     ioServer.emit('whoNeedToPlay', {nextPlayer : nextPlayer, player : player}); //changer nom variable player = ancien player pour les points 
+  });
+
+  socket.on('requestServerCheck', (datas) => {
+    const order = datas.order;
+    const orderFullInformation = [];
+    order.forEach(card => {
+      allCardGiven.forEach(cardFullInfo => {
+        if(card == cardFullInfo.id){
+          orderFullInformation.push(cardFullInfo);
+        }
+      });
+    });
+    let returnValue = true;
+    for(let i = 1; i<orderFullInformation.length; i++) {
+      if(orderFullInformation[i].date < orderFullInformation[i-1].date){
+        console.log('je viens ici');
+        returnValue = false;
+      }
+    };
+    //return returnValue;
+    socket.emit('responseServerCheck', {returnValue : returnValue, index : datas.index});
   });
 
   socket.on('wrongPosition', (innerHTML) => {

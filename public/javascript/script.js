@@ -15,77 +15,29 @@ socket.on('connect', (req, res) => {
   
   socket.on('askForOtherPlayer', (allPlayer) => {
     allPlayer.forEach(player => {
-      const div = document.createElement('div');
-      div.id = player.id;
-      const sousDiv = document.createElement('div');
-      const sousDivDeux = document.createElement('div');
-      const img = document.createElement('img');
-      img.src = `/img/avatar/${player.avatar}.png`;
-      img.style.width = '100px';
-      const h3 = document.createElement('h3');
-      h3.className = 'playerName';
-      h3.innerText = player.name;
-      const p = document.createElement('p');
-      p.className = 'playerPoints';
-      p.innerText = 'Points : ';
-      div.appendChild(sousDiv);
-      div.appendChild(sousDivDeux);
-      sousDiv.appendChild(img);
-      sousDivDeux.appendChild(h3);
-      sousDivDeux.appendChild(p);
-      document.querySelector('.otherPlayerList').appendChild(div);
+      renderOtherPlayer(player);
     });
   });
 });
 
 const button = document.querySelector('.buttonReady');
-const fasTimes = document.querySelector('.fa-times');
 
 button.addEventListener('click', () => {
-  if(button.innerText == 'Prêt à jouer?'){
-    button.innerText = 'Prêt !';
-    fasTimes.classList.remove('fa-times', 'red');
-    fasTimes.classList.add('fa-check', 'green');
-    socket.emit('playerIsReady');
-  } else {
-    console.log('ici');
-    button.innerText = 'Prêt à jouer?';
-    fasTimes.classList.remove('fa-check', 'green');
-    fasTimes.classList.add('fa-times', 'red');
-    socket.emit('playerIsNotReady');
-  }
+  clickOnReadyButton();
 });
 
 socket.on('newPlayer', (player) => {
-  const div = document.createElement('div');
-  div.id = player.id;
-  const sousDiv = document.createElement('div');
-  const sousDivDeux = document.createElement('div');
-  const img = document.createElement('img');
-  img.src = `/img/avatar/${player.avatar}.png`;
-  img.style.width = '100px';
-  const h3 = document.createElement('h3');
-  h3.className = 'playerName';
-  h3.innerText = player.name;
-  const p = document.createElement('p');
-  p.className = 'playerPoints';
-  p.innerText = 'Points : ';
-  div.appendChild(sousDiv);
-  div.appendChild(sousDivDeux);
-  sousDiv.appendChild(img);
-  sousDivDeux.appendChild(h3);
-  sousDivDeux.appendChild(p);
-  document.querySelector('.otherPlayerList').appendChild(div);
+  renderOtherPlayer(player);
 });
 
 socket.on('giveHand', (player) => {
 
-  renderPlayer(player, true, 'player', 'container', 'draggable');
+  renderPlayer(player);
   
   draggables = document.querySelectorAll('.draggable');
   containers = document.querySelectorAll('.container');
 
-  draggables.forEach(draggable => {
+  draggables.forEach((draggable, index) => {
 
     draggable.addEventListener('dragstart', () => {
       draggable.classList.add('dragging');
@@ -94,24 +46,8 @@ socket.on('giveHand', (player) => {
     draggable.addEventListener('dragend', () => {
       draggable.classList.remove('dragging');
       draggable.classList.add('last-dragged');
-      const checkingPosition = getPositionLastDragged();
-      if(draggable.parentNode.className === 'container reception'){
-        const orderListEvent = document.querySelector('.reception').innerHTML;
-        socket.emit('eventPositionned', {innerHTML : orderListEvent});
-        if(checkingPosition === true){
-          draggable.draggable = false;
-          console.log(draggable.draggable);
-          const orderListEvent = document.querySelector('.reception').innerHTML;
-          socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
-        } else {
-          setTimeout(() => {
-            const container = document.querySelector('.player');
-            container.appendChild(draggable);
-            const order = document.querySelector('.reception').innerHTML;
-            socket.emit('wrongPosition', order);
-          }, 500);
-        }
-      }
+      console.log(draggable);
+      getPositionLastDragged(draggable, index);      
     });
   });
   
@@ -143,17 +79,35 @@ socket.on('giveHand', (player) => {
     }, {offset : Number.NEGATIVE_INFINITY}).element;
   };
   
-  function getPositionLastDragged() {
+  function getPositionLastDragged(draggable, index) {
     const container = document.querySelector('.reception')
     const draggableInOrder = [...container.getElementsByClassName('draggable')];
-    let returnValue = true;
-    for(let i = 1; i<draggableInOrder.length; i++) {
-      if(parseFloat(draggableInOrder[i].id) > parseFloat(draggableInOrder[i-1].id)){
-      } else {
-        returnValue = false;
+    const order = [];
+    draggableInOrder.forEach(draggableOrder => {
+      order.push(draggableOrder.id);
+    });
+    console.log(draggable);
+    socket.emit('requestServerCheck', {order : order, index : index});
+    socket.on('responseServerCheck', (datas) => {
+      const checkingPosition = datas.returnValue;
+      const myDrag = draggables[index];
+      if(myDrag.parentNode.className === 'container reception'){
+        const orderListEvent = document.querySelector('.reception').innerHTML;
+        socket.emit('eventPositionned', {innerHTML : orderListEvent});
+        if(checkingPosition === true){
+          myDrag.draggable = false;
+          const orderListEvent = document.querySelector('.reception').innerHTML;
+          socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
+        } else {
+          setTimeout(() => {
+            const container = document.querySelector('.player');
+            container.appendChild(myDrag);
+            const order = document.querySelector('.reception').innerHTML;
+            socket.emit('wrongPosition', order);
+          }, 500);
+        }
       }
-    };
-    return returnValue;
+    });
   };
 });
 

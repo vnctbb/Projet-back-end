@@ -5,7 +5,7 @@ head
   title Timeline - Lobby - Le jeuTimeline - Le jeu qui vous fait voyager dans le temps !
   script(src="/socket.io/socket.io.min.js")
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
-  link(rel='stylesheet' href='/css/style.css')
+  link(rel='stylesheet' href='/css/lobby.css')
 body
   header
     a(href='#')
@@ -44,6 +44,6 @@ body
 script.
   let username = !{JSON.stringify(username)};
   let avatar = !{JSON.stringify(avatar)};
-script(src='/js/functionRepertory.js')
-script(src='/js/previousGame-script.js')
+script(src='/js/repertory.js')
+script(src='/js/previous-game.js')
 script(src='/js/script.js')

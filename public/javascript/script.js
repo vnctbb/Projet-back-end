@@ -101,7 +101,7 @@ socket.on('responseServerCheck', (datas) => {
     if(position === true){
       draggedElement.draggable = false;
       const orderListEvent = document.querySelector('.reception').innerHTML;
-      socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
+      socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true, actualCard : datas.actualCard});
     } else {
       setTimeout(() => {
         const container = document.querySelector('.player');
@@ -146,8 +146,17 @@ socket.on('whoNeedToPlay', (data) => {
   div.querySelector('.playerPoints').innerText = `Points : ${data.player.points}`;
 });
 
-socket.on('eventPositionned', (innerHTML) => {
-  document.querySelector('.reception').innerHTML = innerHTML;
+socket.on('eventPositionned', (datas) => {
+  console.log(datas.innerHTML)
+  document.querySelector('.reception').innerHTML = datas.innerHTML;
+});
+
+socket.on('renderDate', (card) => {
+  if(card){
+    const span = document.createElement('span');
+    span.innerHTML = card.date;
+    document.getElementById(card._id).appendChild(span);
+  }
 });
 
 socket.on('wrongPosition', (innerHTML) => {

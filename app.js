@@ -118,94 +118,15 @@ const server = app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
 
-/**
- * Fake bdd
- */
+let dataBase;
 
-const dataBase = [
-  {
-    id : 12,
-    titre : 'Apparition des abeilles',
-    date : -1000000,
-    given : false
-  },
-  {
-    id : 13,
-    titre : 'Premier village',
-    date : -10000,
-    given : false
-  }
-  ,
-  {
-    id : 14,
-    titre : 'Création de la NBA',
-    date : 1946,
-    given : false
-  }
-  ,
-  {
-    id : 15,
-    titre : 'Création de Facebook',
-    date : 2004,
-    given : false
-  }
-  ,
-  {
-    id : 16,
-    titre : 'Sortie du premier Star Wars',
-    date : 1981,
-    given : false
-  }
-  ,
-  {
-    id : 17,
-    titre : 'Apparition de la fourchette',
-    date : 972,
-    given : false
-  }
-  ,
-  {
-    id : 18,
-    titre : 'Invention de la boite de conserve',
-    date : 1810,
-    given : false
-  }
-  ,
-  {
-    id : 19,
-    titre : 'Invention du vin',
-    date : -6000,
-    given : false
-  }
-  ,
-  {
-    id : 20,
-    titre : 'Naissance du Hip-Hop',
-    date : 1974,
-    given : false
-  }
-  ,
-  {
-    id : 21,
-    titre : 'Domestication du chat',
-    date : -4500,
-    given : false
-  }
-  ,
-  {
-    id : 22,
-    titre : 'Apparition du croissant',
-    date : 1683,
-    given : false
-  }
-  ,
-  {
-    id : 23,
-    titre : 'Découverte du mouvement des planètes',
-    date : 1513,
-    given : false
-  }
-];
+MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
+  if(err) throw err;
+  const collection = client.db(nameDb).collection(collectionEvents);
+  collection.find().toArray((err, data) => {
+    dataBase = data;
+  });
+});
 
 function getRandomNumber (db) {
   return Math.round(Math.random() * (db.length -1));
@@ -224,7 +145,7 @@ function giveHand (nbOfCardNeeded) {
     allCardGiven.push(dataBase[index]);
     const item = dataBase[index];
     const infoGiven = {
-      id : item.id,
+      id : item._id,
       titre : item.titre
     }
     hand.push(infoGiven);
@@ -370,7 +291,8 @@ ioServer.on('connection', (socket) => {
       });
     };
     const nextPlayer = getNextPlayer(player.id);
-    socket.broadcast.emit('eventPositionned', datas.innerHTML);
+    socket.broadcast.emit('eventPositionned', {innerHTML : datas.innerHTML});
+    ioServer.emit('renderDate', datas.actualCard);
     ioServer.to(player.id).emit("notReadyToPlay");
     ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
     allPlayer[getIndexInAllPlayer(player.id)].points = player.points;
@@ -378,12 +300,13 @@ ioServer.on('connection', (socket) => {
   });
 
   socket.on('requestServerCheck', (datas) => {
-    console.log('je recois une requete')
     const order = datas.order;
     const orderFullInformation = [];
+    let actualCard;
     order.forEach(card => {
       allCardGiven.forEach(cardFullInfo => {
-        if(card == cardFullInfo.id){
+        if(card == cardFullInfo._id){
+          actualCard = cardFullInfo;
           orderFullInformation.push(cardFullInfo);
         }
       });
@@ -396,7 +319,7 @@ ioServer.on('connection', (socket) => {
     };
     //return returnValue;
     const retour = returnValue;
-    socket.emit('responseServerCheck', {returnValue : retour, index : datas.index});
+    socket.emit('responseServerCheck', {returnValue : retour, index : datas.index, actualCard : actualCard});
   });
 
   socket.on('wrongPosition', (innerHTML) => {

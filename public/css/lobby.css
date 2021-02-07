@@ -125,7 +125,9 @@ header > a > .fas:hover{
   border-radius: 15px;
   border: 1px solid rgb(59, 59, 59);
   cursor: move;
+  display: flex;
   font-size: 0.8em;
+  justify-content: space-between;
 }
 
 .notDraggable{
@@ -165,6 +167,11 @@ header > a > .fas:hover{
 
 .draggable.dragging{
   opacity : 0.5;
+}
+
+span{
+  font-size: 1em;
+  font-weight: bold;
 }
 
 .menuPartie{

@@ -30,14 +30,16 @@ socket.on('newPlayer', (player) => {
   renderOtherPlayer(player);
 });
 
-socket.on('giveHand', (player) => {
+let ceDrag;
+
+socket.on('giveHand', player => {
 
   renderPlayer(player);
-  
+
   draggables = document.querySelectorAll('.draggable');
   containers = document.querySelectorAll('.container');
 
-  draggables.forEach((draggable) => {
+  draggables.forEach((draggable, index) => {
 
     draggable.addEventListener('dragstart', () => {
       draggable.classList.add('dragging');
@@ -46,7 +48,8 @@ socket.on('giveHand', (player) => {
     draggable.addEventListener('dragend', () => {
       draggable.classList.remove('dragging');
       draggable.classList.add('last-dragged');
-      getPositionLastDragged(draggable);      
+      ceDrag = draggable;
+      getPositionLastDragged(draggable, index);      
     });
   });
   
@@ -63,21 +66,6 @@ socket.on('giveHand', (player) => {
     });
   });
   
-  
-  function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
-  
-    return draggableElements.reduce((closest, child) => {
-      const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
-      if (offset < 0 && offset > closest.offset) {
-        return { offset: offset, element: child};
-      } else {
-        return closest
-      }
-    }, {offset : Number.NEGATIVE_INFINITY}).element;
-  };
-  
   function getPositionLastDragged(draggable, index) {
     const container = document.querySelector('.reception')
     const draggableInOrder = [...container.getElementsByClassName('draggable')];
@@ -93,8 +81,7 @@ socket.on('giveHand', (player) => {
 
 socket.on('responseServerCheck', (datas) => {
   const checkingPosition = datas.returnValue;
-  const myDrag = draggables[0];
-  console.log(draggables);
+  const myDrag = ceDrag;
   if(myDrag.parentNode.className === 'container reception'){
     const orderListEvent = document.querySelector('.reception').innerHTML;
     socket.emit('eventPositionned', {innerHTML : orderListEvent});

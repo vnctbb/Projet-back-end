@@ -400,7 +400,7 @@ ioServer.on('connection', (socket) => {
   });
 
   socket.on('wrongPosition', (innerHTML) => {
-    player.streak = 0;
+    player.streak = 1;
     player.points -= 50;
     socket.broadcast.emit('wrongPosition', innerHTML);
   });

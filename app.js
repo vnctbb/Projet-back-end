@@ -306,8 +306,9 @@ ioServer.on('connection', (socket) => {
     order.forEach(card => {
       allCardGiven.forEach(cardFullInfo => {
         if(card == cardFullInfo._id){
-          actualCard = cardFullInfo;
           orderFullInformation.push(cardFullInfo);
+          if(datas.cardId == cardFullInfo._id)
+            actualCard = cardFullInfo;
         }
       });
     });

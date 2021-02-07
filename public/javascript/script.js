@@ -87,7 +87,7 @@ socket.on('giveHand', player => {
       order.push(draggableOrder.id);
     });
     if(draggable.parentNode.className === 'container reception'){
-      socket.emit('requestServerCheck', {order : order, index : index});
+      socket.emit('requestServerCheck', {order : order, index : index, cardId : draggable.id});
     }
   };
 });
@@ -147,7 +147,6 @@ socket.on('whoNeedToPlay', (data) => {
 });
 
 socket.on('eventPositionned', (datas) => {
-  console.log(datas.innerHTML)
   document.querySelector('.reception').innerHTML = datas.innerHTML;
 });
 
@@ -155,6 +154,7 @@ socket.on('renderDate', (card) => {
   if(card){
     const span = document.createElement('span');
     span.innerHTML = card.date;
+    console.log(card._id);
     document.getElementById(card._id).appendChild(span);
   }
 });

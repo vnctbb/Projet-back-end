@@ -37,7 +37,7 @@ socket.on('giveHand', (player) => {
   draggables = document.querySelectorAll('.draggable');
   containers = document.querySelectorAll('.container');
 
-  draggables.forEach((draggable, index) => {
+  draggables.forEach((draggable) => {
 
     draggable.addEventListener('dragstart', () => {
       draggable.classList.add('dragging');
@@ -46,8 +46,7 @@ socket.on('giveHand', (player) => {
     draggable.addEventListener('dragend', () => {
       draggable.classList.remove('dragging');
       draggable.classList.add('last-dragged');
-      console.log(draggable);
-      getPositionLastDragged(draggable, index);      
+      getPositionLastDragged(draggable);      
     });
   });
   
@@ -86,29 +85,33 @@ socket.on('giveHand', (player) => {
     draggableInOrder.forEach(draggableOrder => {
       order.push(draggableOrder.id);
     });
-    console.log(draggable);
-    socket.emit('requestServerCheck', {order : order, index : index});
-    socket.on('responseServerCheck', (datas) => {
-      const checkingPosition = datas.returnValue;
-      const myDrag = draggables[index];
-      if(myDrag.parentNode.className === 'container reception'){
-        const orderListEvent = document.querySelector('.reception').innerHTML;
-        socket.emit('eventPositionned', {innerHTML : orderListEvent});
-        if(checkingPosition === true){
-          myDrag.draggable = false;
-          const orderListEvent = document.querySelector('.reception').innerHTML;
-          socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
-        } else {
-          setTimeout(() => {
-            const container = document.querySelector('.player');
-            container.appendChild(myDrag);
-            const order = document.querySelector('.reception').innerHTML;
-            socket.emit('wrongPosition', order);
-          }, 500);
-        }
-      }
-    });
+    if(draggable.parentNode.className === 'container reception'){
+      socket.emit('requestServerCheck', {order : order, index : index});
+    }
   };
+});
+
+socket.on('responseServerCheck', (datas) => {
+  const checkingPosition = datas.returnValue;
+  const myDrag = draggables[0];
+  console.log(draggables);
+  if(myDrag.parentNode.className === 'container reception'){
+    const orderListEvent = document.querySelector('.reception').innerHTML;
+    socket.emit('eventPositionned', {innerHTML : orderListEvent});
+    if(checkingPosition === true){
+      myDrag.draggable = false;
+      const orderListEvent = document.querySelector('.reception').innerHTML;
+      socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
+    } else {
+      setTimeout(() => {
+        const container = document.querySelector('.player');
+        container.appendChild(myDrag);
+        const order = document.querySelector('.reception').innerHTML;
+        socket.emit('wrongPosition', order);
+      }, 500);
+    }
+  } else {
+  }
 });
 
 socket.on('readyToPlay', (data) => {

@@ -378,6 +378,7 @@ ioServer.on('connection', (socket) => {
   });
 
   socket.on('requestServerCheck', (datas) => {
+    console.log('je recois une requete')
     const order = datas.order;
     const orderFullInformation = [];
     order.forEach(card => {
@@ -390,12 +391,12 @@ ioServer.on('connection', (socket) => {
     let returnValue = true;
     for(let i = 1; i<orderFullInformation.length; i++) {
       if(orderFullInformation[i].date < orderFullInformation[i-1].date){
-        console.log('je viens ici');
         returnValue = false;
       }
     };
     //return returnValue;
-    socket.emit('responseServerCheck', {returnValue : returnValue, index : datas.index});
+    const retour = returnValue;
+    socket.emit('responseServerCheck', {returnValue : retour, index : datas.index});
   });
 
   socket.on('wrongPosition', (innerHTML) => {

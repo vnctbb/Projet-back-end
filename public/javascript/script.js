@@ -9,31 +9,44 @@ const socket = io();
 socket.on('connect', (req, res) => {
   console.log('connection établie');
 
+  // Envoi au serveur les informations du joueur qui vient de se connecter
   socket.emit('saveUsername', {username : username, avatar : avatar});
 
+  // Demande au serveur si d'autre joueurs sont déja dans le lobby
   socket.emit('askForOtherPlayer');
   
+  // Reception les informations des joueurs déja dans le lobby
   socket.on('askForOtherPlayer', (allPlayer) => {
     allPlayer.forEach(player => {
+      // Applique la fonction qui permet d'afficher les autres joueurs
+      // pour chaque joueur
       renderOtherPlayer(player);
     });
   });
 });
 
+// Récupération du boutton "Prêt"
 const button = document.querySelector('.buttonReady');
 
+// Event "click" sur le bouton
 button.addEventListener('click', () => {
+  // Applique la fonction de changement de status
   clickOnReadyButton();
 });
 
+// Reception les informations de joueur arrivé après
 socket.on('newPlayer', (player) => {
+  // Applique la fonction qui permet d'afficher les autres joueurs
   renderOtherPlayer(player);
 });
 
-let ceDrag;
+// Variable qui permet de conserver l'élément en cours de déplacement
+let activeDraggableElement;
 
+// Reception des cartes
 socket.on('giveHand', player => {
-
+  
+  // Affichage du joueur connecté
   renderPlayer(player);
 
   draggables = document.querySelectorAll('.draggable');
@@ -48,7 +61,7 @@ socket.on('giveHand', player => {
     draggable.addEventListener('dragend', () => {
       draggable.classList.remove('dragging');
       draggable.classList.add('last-dragged');
-      ceDrag = draggable;
+      activeDraggableElement = draggable;
       getPositionLastDragged(draggable, index);      
     });
   });
@@ -80,24 +93,23 @@ socket.on('giveHand', player => {
 });
 
 socket.on('responseServerCheck', (datas) => {
-  const checkingPosition = datas.returnValue;
-  const myDrag = ceDrag;
-  if(myDrag.parentNode.className === 'container reception'){
+  const position = datas.returnValue;
+  const draggedElement = activeDraggableElement;
+  if(draggedElement.parentNode.className === 'container reception'){
     const orderListEvent = document.querySelector('.reception').innerHTML;
     socket.emit('eventPositionned', {innerHTML : orderListEvent});
-    if(checkingPosition === true){
-      myDrag.draggable = false;
+    if(position === true){
+      draggedElement.draggable = false;
       const orderListEvent = document.querySelector('.reception').innerHTML;
       socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true});
     } else {
       setTimeout(() => {
         const container = document.querySelector('.player');
-        container.appendChild(myDrag);
+        container.appendChild(draggedElement);
         const order = document.querySelector('.reception').innerHTML;
         socket.emit('wrongPosition', order);
       }, 500);
     }
-  } else {
   }
 });
 

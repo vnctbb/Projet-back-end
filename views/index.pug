@@ -23,12 +23,18 @@ body
           input(type="radio" name='personnage' id=`${avatar}` value=`${avatar}` required)
     input(type="text" name="username" minlength=3 maxlength=40)
     input(type="submit" value="Rejoindre la salle de jeu")
-    if (error == 'taken')
+    if (error == 'usernameTaken')
       p.red Désolé, ce nom est déja pris !
-    if (error == 'empty')
+    if (error == 'emptyUsername')
       p.red Attention, tu n'as rentré aucun nom !
+    if (error == 'usernameNotOk')
+      p.red Le nom renseigner ne correspond pas au format demandé !
     if (error == 'emptyAvatar')
       p.red Attention, tu n'as pas sélectionné d'avatar !
+    if (error == 'gameIsRunning')
+      p.red Une partie est déja en cours, attend le prochain tour
+    if (error == 'maxPlayer')
+      p.red Le nombre maximum de joueur est atteint, attend la prochaine partie
   div.menuPartie
     div
       i.fas.fa-times.cross

@@ -1,131 +1,116 @@
 'use strict'
 
+// module express
 const express = require('express');
-const path = require('path');
 const app = express();
 
+// module bodyParser
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({
   extended : false
 }));
 
+// module mongoClient
 const MongoClient = require('mongodb').MongoClient;
-const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority';
-const nameDb = 'timeline';
-const collectionGames = 'previousGame';
-const collectionEvents = 'eventList'
+const nameDb = 'timeline'; // nom de la database
+const collectionEvents = 'eventList'; // nom de la collection des évènements
+const collectionGames = 'previousGame'; // nom de la collection des parties précédentes
+const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
 
+// module personnalisé
+const formatDatabase = require('module-date.js');
+const treatmentDatabase = require('module-database.js');
+
+// déclaration de la variable PORT
 const PORT = process.env.PORT || 3000;
 
+// déclaration de fichier statique
 app.use('/css', express.static(__dirname + '/public/css'));
-app.use('/js', express.static(__dirname + '/public/javascript'));
 app.use('/img', express.static(__dirname + '/public/images'));
+app.use('/js', express.static(__dirname + '/public/javascript'));
 
+// déclaration du générateur de template
 app.set('view engine', 'pug');
 
 /**
  * Serveur HTTP
  */
 
- const addZero = (number) => {
-  if(number < 10){
-    const numberString = number.toString();
-    number = `0${numberString}`;
-    return number;
-  } else {
-    return number
-  }
- };
-
-const getDate = (uneDate) => {
-  const jour = addZero(uneDate.getDay());
-  const mois = addZero(uneDate.getMonth());
-  const année = uneDate.getFullYear();
-  const heure = addZero(uneDate.getHours());
-  const minutes = addZero(uneDate.getMinutes());
-  const format = `le ${jour}/${mois}/${année} à ${heure}h${minutes}`;
-  return format;
-};
-
-const getDuration = (uneDate, deuxDate) => {
-  let ecart = uneDate.getTime() - deuxDate.getTime();
-    ecart = - ecart;
-
-  let mi = Math.floor(ecart / 60000) % 60;
-  let s = Math.floor(ecart / 1000) % 60;
-
-  if(mi < 10){mi = '0' + mi};
-  if(s < 10){s = '0' + s};
-
-  return  mi + 'min ' + s + 's';
-};
-
+// requête GET page d'accueil
+// renvoi de la page index
 app.get('/', (req, res) => {
-  const personnage = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
-  MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
-    if(err) throw err;
-    const collection = client.db(nameDb).collection(collectionGames);
-    collection.find().toArray((err, data) => {
-      if(err) throw err;
-      data.forEach(game => {
-        game.dateFormat = getDate(game.date);
-        game.durationFormat = getDuration(game.date, game.duration);
-      });
-      res.render('index',{previousGame : data, personnage : personnage});
-    });
+  const avatar = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+  treatmentDatabase.find({
+    collection : 'game',
+    sort : {date : -1},
+    done : (datas) => {
+      formatDatabase(datas);
+      res.render('index',{previousGame : datas, personnage : avatar});
+    }
   });
 });
 
+// requête POST réception des données du formulaire de la page index
+// renvoi de la page lobby
 app.post('/lobby', (req, res) => {
-  const username = req.body.username;
-  const avatar = req.body.personnage;
   const personnage = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+  const player = {
+    username : req.body.username,
+    avatar : req.body.personnage,
+  }
   let error = false;
-    MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
-      if(err) throw err;
-      const collection = client.db(nameDb).collection(collectionGames);
-      collection.find().toArray((err, data) => {
-        if(err) throw err;
-        data.forEach(game => {
-          game.dateFormat = getDate(game.date);
-          game.durationFormat = getDuration(game.date, game.duration);
-        });
-        allPlayer.forEach(player => {
-          if(player.name == username){
-            error = 'taken';
-          }
-        });
-        if(username == ''){
-          res.render('index', {error : 'empty', previousGame : data, personnage : personnage})
-        }
-        if(!personnage.indexOf(avatar) < 0){
-          res.render('index', {error : 'empty', previousGame : data, personnage : personnage})
-        }
-        if(error){
-          res.render('index', {error : error, previousGame : data, personnage : personnage});
-        } else {
-          res.render('lobby', {username : username, avatar : avatar, previousGame : data});
-      };
-    });
+
+  allPlayer.forEach(item => {
+    if(item.name == player.username){
+      error = 'usernameTaken';
+    }
+  });
+
+  if(player.username == ''){
+    error = 'emptyUsername';
+  }
+  if(personnage.indexOf(player.avatar) < 0){
+    error = 'emptyAvatar';
+  }
+  if(gameIsRunning){
+    error = 'gameIsRunning';
+  }
+  if(allPlayer.length === 8){
+    error = 'maxPlayer';
+  }
+  if(player.username.length < 3 || player.username.length > 25){
+    error = 'usernameNotOk'
+  }
+  treatmentDatabase.find({
+    collection : 'game',
+    done : (datas) => {
+      formatDatabase(datas);
+      if(error){
+        res.render('index', {error : error, previousGame : datas, personnage : personnage});
+      } else {
+        res.render('lobby', {username : player.username, avatar : player.avatar, previousGame : datas});
+      }
+    }
   });
 });
 
+// gestion erreur d'URL
 app.use( (req, res) => {
-  res.status(404).send('error404');
+  res.status(404).render('404');
 });
 
+// constante 'server' pour relier le serveur express au serveur websocket
 const server = app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
 
 let dataBase;
 
-MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
-  if(err) throw err;
-  const collection = client.db(nameDb).collection(collectionEvents);
-  collection.find().toArray((err, data) => {
-    dataBase = data;
-  });
+treatmentDatabase.find({
+  collection : 'events',
+  done : (datas) => {
+    dataBase = datas;
+  }
 });
 
 function getRandomNumber (db) {
@@ -231,10 +216,7 @@ ioServer.on('connection', (socket) => {
   socket.on('askForOtherPlayer', () => {
     socket.emit('askForOtherPlayer', allPlayer.slice(0, (allPlayer.length-1)));
   });
-
-  // Faire une route style 'new-player', avec la valeur d'un input pour donner le nom du player,
-  // A ce moment là le push dans le tableau,
-
+  
   socket.emit('giveHand', player);
 
   ioServer.emit("notReadyToPlay");
@@ -263,10 +245,6 @@ ioServer.on('connection', (socket) => {
       ioServer.to(allPlayer[0].id).emit("readyToPlay", {firstPlayer : true});
     }
   });
-
-  //ioServer.emit('notReadyToPlay')
-
-  //ioServer.to(allPlayer[0].id).emit('readyToPlay');
 
   socket.on('eventPositionned', (datas) => {
     if(datas.position){

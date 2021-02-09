@@ -18,12 +18,12 @@ const collectionGames = 'previousGame'; // nom de la collection des parties pré
 const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
 
 // module personnalisé
-const formatDatabase = require('module-date.js');
-const treatmentDatabase = require('module-database.js');
-const toolbox = require('module-toolbox.js');
-const everyPlayer = require('module-competitor.js');
-const distribution = require('module-distribution.js');
-const game = require('module-game.js');
+const formatDatabase = require('./modules/module-date.js');
+const treatmentDatabase = require('./modules/module-database.js');
+const toolbox = require('./modules/module-toolbox.js');
+const everyPlayer = require('./modules/module-competitor.js');
+const distribution = require('./modules/module-distribution.js');
+const game = require('./modules/module-game.js');
 
 // déclaration de la variable PORT
 const PORT = process.env.PORT || 3000;

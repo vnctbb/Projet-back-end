@@ -4,7 +4,7 @@
  * Module représentant la partie en cours
  */
 
- const everyPlayer = require('module-competitor.js');
+ const everyPlayer = require('./module-competitor.js');
 
 const game = {
 	date: 0,

@@ -4,8 +4,8 @@
  * Module pour créer de nouveau joueur
  */
 
-const distribution = require('module-distribution.js');
-const everyPlayer = require('module-competitor.js');
+const distribution = require('./module-distribution.js');
+const everyPlayer = require('./module-competitor.js');
 
 // constructeur de joueur
 class NewPlayer {

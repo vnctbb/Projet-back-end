@@ -36,14 +36,6 @@ app.use('/js', express.static(__dirname + '/public/javascript'));
 // déclaration du générateur de template
 app.set('view engine', 'pug');
 
-// module
-const formatDatabase = require('date');
-const treatmentDatabase = require('module-database');
-const toolbox = require('module-toolbox');
-const everyPlayer = require('module-competitor');
-const distribution = require('module-distribution');
-const game = require('module-game');
-
 /**
  * Serveur HTTP
  */

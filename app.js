@@ -29,7 +29,7 @@ app.use('/js', express.static(__dirname + '/public/javascript'));
 app.set('view engine', 'pug');
 
 // module
-const formatDatabase = require('module-date');
+const formatDatabase = require('date');
 const treatmentDatabase = require('module-database');
 const toolbox = require('module-toolbox');
 const everyPlayer = require('module-competitor');

@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/vnctbb/backEndGame#readme",
   "dependencies": {
+    "date": "^1.0.2",
     "express": "^4.17.1",
     "mongodb": "^3.6.4",
     "pug": "^3.0.0",

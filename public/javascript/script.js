@@ -44,10 +44,14 @@ socket.on('newPlayer', (player) => {
 let activeDraggableElement;
 
 // Reception des cartes
-socket.on('giveHand', player => {
+socket.on('giveHand', datas => {
   
   // Affichage du joueur connecté
-  renderPlayer(player);
+  if(datas.newCard) {
+    renderDeck(datas.player)
+  } else {
+    renderPlayer(datas.player);
+  }
 
   draggables = document.querySelectorAll('.draggable');
   containers = document.querySelectorAll('.container');
@@ -97,7 +101,7 @@ socket.on('responseServerCheck', (datas) => {
   const draggedElement = activeDraggableElement;
   if(draggedElement.parentNode.className === 'container reception'){
     const orderListEvent = document.querySelector('.reception').innerHTML;
-    socket.emit('eventPositionned', {innerHTML : orderListEvent});
+    socket.emit('eventPositionned', {innerHTML : orderListEvent, elementId : draggedElement.id});
     if(position === true){
       draggedElement.draggable = false;
       const orderListEvent = document.querySelector('.reception').innerHTML;
@@ -107,8 +111,8 @@ socket.on('responseServerCheck', (datas) => {
         const container = document.querySelector('.player');
         container.appendChild(draggedElement);
         const order = document.querySelector('.reception').innerHTML;
-        socket.emit('wrongPosition', order);
-      }, 500);
+        socket.emit('wrongPosition', {innerHTML : order, elementId : draggedElement.id});
+      }, 2500);
     }
   }
 });
@@ -154,13 +158,12 @@ socket.on('renderDate', (card) => {
   if(card){
     const span = document.createElement('span');
     span.innerHTML = card.date;
-    console.log(card._id);
     document.getElementById(card._id).appendChild(span);
   }
 });
 
-socket.on('wrongPosition', (innerHTML) => {
-  document.querySelector('.reception').innerHTML = innerHTML;
+socket.on('wrongPosition', (datas) => {
+  document.querySelector('.reception').innerHTML = datas.innerHTML;
 });
 
 socket.on('weHaveAWinner', (data) => {

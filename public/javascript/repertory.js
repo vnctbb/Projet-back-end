@@ -19,6 +19,20 @@ const renderPlayer = (player) => {
   document.querySelector('.playerList').appendChild(newPlayer);
 };
 
+const renderDeck = (player) => {
+  const div = document.querySelector('.player');
+  div.innerText = '';
+  player.hand.forEach((card, index) => {
+    const newCard = document.createElement('p');
+    newCard.id = card.id;
+    newCard.draggable = false;
+    newCard.classList.add('draggable');
+    newCard.innerHTML = card.titre;
+    console.log(newCard);
+    div.appendChild(newCard);
+  });
+};
+
 /**
  * Fonction pour l'affichage des autres joueurs
 */

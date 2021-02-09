@@ -20,6 +20,10 @@ const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retr
 // module personnalisé
 const formatDatabase = require('module-date.js');
 const treatmentDatabase = require('module-database.js');
+const toolbox = require('module-toolbox.js');
+const everyPlayer = require('module-competitor.js');
+const distribution = require('module-distribution.js');
+const game = require('module-game.js');
 
 // déclaration de la variable PORT
 const PORT = process.env.PORT || 3000;
@@ -60,7 +64,7 @@ app.post('/lobby', (req, res) => {
   }
   let error = false;
 
-  allPlayer.forEach(item => {
+  everyPlayer.list.forEach(item => {
     if(item.name == player.username){
       error = 'usernameTaken';
     }
@@ -72,10 +76,10 @@ app.post('/lobby', (req, res) => {
   if(personnage.indexOf(player.avatar) < 0){
     error = 'emptyAvatar';
   }
-  if(gameIsRunning){
+  if(game.running){
     error = 'gameIsRunning';
   }
-  if(allPlayer.length === 8){
+  if(everyPlayer.list.length === 8){
     error = 'maxPlayer';
   }
   if(player.username.length < 3 || player.username.length > 25){
@@ -104,6 +108,7 @@ const server = app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });
 
+// appel de la base de donnée pour récupérer le jeu de carte
 let dataBase;
 
 treatmentDatabase.find({
@@ -113,151 +118,59 @@ treatmentDatabase.find({
   }
 });
 
-function getRandomNumber (db) {
-  return Math.round(Math.random() * (db.length -1));
-}
-
-function giveHand (nbOfCardNeeded) {
-  const hand = [];
-  for(let i = 0; i<nbOfCardNeeded; i++){
-    let index = getRandomNumber(dataBase);
-    if(dataBase[index].given){
-      while(dataBase[index].given){
-        index = getRandomNumber(dataBase);
-      }
-    }
-    dataBase[index].given = true;
-    allCardGiven.push(dataBase[index]);
-    const item = dataBase[index];
-    const infoGiven = {
-      id : item._id,
-      titre : item.titre
-    }
-    hand.push(infoGiven);
-  };
-  return hand;
-};
-
-function getIndexInAllPlayer (id) {
-  let indexAllPlayer;
-  allPlayer.forEach((player, index) => {
-    if(player.id == id){
-      indexAllPlayer = index;
-    }
-  });
-  return indexAllPlayer;
-};
-
-function getNextPlayer (id) {
-  const index = getIndexInAllPlayer(id);
-  if(index == allPlayer.length - 1){
-    return allPlayer[0];
-  } else {
-    return allPlayer[index+1];
-  }
-}
+/**
+ * Variables diverse
+ */
 
 /**
 * Serveur Websocket (avec socket.io)
 */
 
-const allPlayer = [];
-
-const allCardGiven = [];
-
-const game = {
-	date: 0,
-	duration: 0,
-	nbOfPlayers: 0,
-	ListOfPlayers: [
-		{
-		name: '',
-		points: 0,		
-		},
-	],
-	winner: {
-		name: '',
-		points: 0,
-	}
-}
-
-let gameIsRunning = false;
-
 const socketio = require('socket.io');
-
 const ioServer = socketio(server);
 
 ioServer.on('connection', (socket) => {
   console.log('connexion établie');
 
-  const player = {
-    id : socket.id,
-    name : ' ',
-    hand : giveHand(4),
-    nbOfCard : 4,
-    streaks : 1,
-    points : 0,
-  }
+  const NewPlayer = require('module-player.js');
+  let player;
 
+  // socket qui reçoit les informations du nouveau joueur
+  // créer le joueur
+  // ajoute le joueur au tableau des joueurs
   socket.on('saveUsername', (data) => {
-    player.name = data.username;
-    player.avatar = data.avatar;
-    allPlayer.push({
-      id : player.id,
-      avatar : player.avatar,
-      name : player.name,
-      hand : player.hand,
-      ready : false,
-      points : player.points
-    });
+    player = new NewPlayer(socket.id, data.username, dataBase, data.avatar);
+    everyPlayer.list.push(player);
     socket.broadcast.emit('newPlayer', player);
+    socket.emit('giveHand', {player : player});
   });
 
+  // socket qui renvoi tous les joueurs
+  // en enlevant le dernier joueur (qui est celui ayant fait la demande)
   socket.on('askForOtherPlayer', () => {
-    socket.emit('askForOtherPlayer', allPlayer.slice(0, (allPlayer.length-1)));
+    socket.emit('askForOtherPlayer', everyPlayer.list.slice(0, (everyPlayer.list.length-1)));
   });
-  
-  socket.emit('giveHand', player);
 
   ioServer.emit("notReadyToPlay");
 
   socket.on('playerIsReady', () => {
-    allPlayer.forEach(Oneplayer => {
-      if(Oneplayer.id == player.id){
-        Oneplayer.ready = true;
-      }
-    });
-    let everybodyReady = true;
-    allPlayer.forEach(player => {
-      if(player.ready === false ){
-        everybodyReady = false;
-      }
-    });
-    if(allPlayer.length <= 1){
-      everybodyReady = false;
-    }
-    // return everybodyReady;
-    if(everybodyReady === true){
-      gameIsRunning = true;
-      game.date = new Date();
-      game.nbOfPlayers = allPlayer.length;
-      ioServer.emit('startGaming', {firstPlayer : allPlayer[0]});
-      ioServer.to(allPlayer[0].id).emit("readyToPlay", {firstPlayer : true});
+    player.nowReady();
+    const playersReady = everyPlayer.ready()
+    if(playersReady === true){
+      game.start(everyPlayer.list);
+      ioServer.emit('startGaming', {firstPlayer : everyPlayer.list[0]});
+      ioServer.to(everyPlayer.list[0].id).emit("readyToPlay", {firstPlayer : true});
     }
   });
 
   socket.on('eventPositionned', (datas) => {
     if(datas.position){
-      player.nbOfCard -= 1;
-      player.points += 100 * player.streaks;
-      player.streaks += 0.2;
+      const index = toolbox.getIndex(player.hand, datas.elementId);
+      player.positionOk(index);
     }
     if(player.nbOfCard == 0 && player.points > 400){
       ioServer.emit('weHaveAWinner', player);
-      game.winner.name = player.name;
-      game.winner.points = player.points;
-      game.duration = new Date();
-      game.listOfPlayers = allPlayer;
+      game.win(player);
       MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
         if(err) throw err;
         const collection = client.db(nameDb).collection(collectionGames);
@@ -268,47 +181,37 @@ ioServer.on('connection', (socket) => {
         });
       });
     };
-    const nextPlayer = getNextPlayer(player.id);
+    const nextPlayer = toolbox.getNextPlayer(player.id, everyPlayer.list);
     socket.broadcast.emit('eventPositionned', {innerHTML : datas.innerHTML});
     ioServer.emit('renderDate', datas.actualCard);
     ioServer.to(player.id).emit("notReadyToPlay");
     ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
-    allPlayer[getIndexInAllPlayer(player.id)].points = player.points;
+    everyPlayer.list[toolbox.getIndex(everyPlayer.list, player.id)].points = player.points;
     ioServer.emit('whoNeedToPlay', {nextPlayer : nextPlayer, player : player}); //changer nom variable player = ancien player pour les points 
   });
 
+  // socket qui reçoit les infos de la carte à vérifier
   socket.on('requestServerCheck', (datas) => {
-    const order = datas.order;
-    const orderFullInformation = [];
-    let actualCard;
-    order.forEach(card => {
-      allCardGiven.forEach(cardFullInfo => {
-        if(card == cardFullInfo._id){
-          orderFullInformation.push(cardFullInfo);
-          if(datas.cardId == cardFullInfo._id)
-            actualCard = cardFullInfo;
-        }
-      });
-    });
-    let returnValue = true;
-    for(let i = 1; i<orderFullInformation.length; i++) {
-      if(orderFullInformation[i].date < orderFullInformation[i-1].date){
-        returnValue = false;
-      }
-    };
-    //return returnValue;
-    const retour = returnValue;
-    socket.emit('responseServerCheck', {returnValue : retour, index : datas.index, actualCard : actualCard});
+    const retour = distribution.cardVerification(datas.order, datas.cardId);
+    retour.index = datas.index;
+    socket.emit('responseServerCheck', retour);
   });
 
-  socket.on('wrongPosition', (innerHTML) => {
+  // traitement sur les cartes lorsque la position est mauvaise
+  socket.on('wrongPosition', (datas) => {
     player.streak = 1;
     player.points -= 50;
-    socket.broadcast.emit('wrongPosition', innerHTML);
+    const indexCard = toolbox.getIndex(player.hand, datas.elementId);
+    const indexPlayer = toolbox.getIndex(everyPlayer.list, player.id);
+    player.hand.splice(indexCard, 1);
+    player.hand.push(distribution.takeCard(dataBase));
+    everyPlayer.list[indexPlayer].hand = player.hand;
+    socket.emit('giveHand', {player : player, newCard : true});
+    socket.broadcast.emit('wrongPosition', {player : player, innerHTML : datas.innerHTML});
   });
 
-  socket.on('disconnect', (socket) => {
-    allPlayer.forEach((playerInArray, index) => {
+  socket.on('disconnect', () => {
+    everyPlayer.list.forEach((playerInArray, index) => {
       if(playerInArray.id == player.id){
         playerInArray.hand.forEach(card => {
           dataBase.forEach(event => {
@@ -317,13 +220,20 @@ ioServer.on('connection', (socket) => {
             }
           })
         });
-        allPlayer.splice(index, 1);
+        everyPlayer.list.splice(index, 1);
       }
     });
-    if(gameIsRunning){
+    if(game.running){
       ioServer.emit('onePlayerIsGone', {name : player.name, running : true});
+      game.running = false;
+      treatmentDatabase.find({
+        collection : 'events',
+        done : (datas) => {
+          dataBase = datas;
+        }
+      });
     } else {
-      ioServer.emit('onePlayerIsGone', {id : player.name, running : false, id : player.id});
+      ioServer.emit('onePlayerIsGone', {name : player.name, id : player.id, running : false});
     }
   });
 

@@ -17,14 +17,6 @@ const collectionEvents = 'eventList'; // nom de la collection des évènements
 const collectionGames = 'previousGame'; // nom de la collection des parties précédentes
 const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
 
-// module personnalisé
-//const formatDatabase = require('module-date.js');
-const treatmentDatabase = require('module-database.js');
-const toolbox = require('module-toolbox.js');
-const everyPlayer = require('module-competitor.js');
-const distribution = require('module-distribution.js');
-const game = require('module-game.js');
-
 // déclaration de la variable PORT
 const PORT = process.env.PORT || 3000;
 
@@ -35,6 +27,14 @@ app.use('/js', express.static(__dirname + '/public/javascript'));
 
 // déclaration du générateur de template
 app.set('view engine', 'pug');
+
+// module
+const formatDatabase = require('module-date');
+const treatmentDatabase = require('module-database');
+const toolbox = require('module-toolbox');
+const everyPlayer = require('module-competitor');
+const distribution = require('module-distribution');
+const game = require('module-game');
 
 /**
  * Serveur HTTP

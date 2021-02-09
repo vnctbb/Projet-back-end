@@ -18,7 +18,7 @@ const collectionGames = 'previousGame'; // nom de la collection des parties pré
 const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
 
 // module personnalisé
-const formatDatabase = require('module-date.js');
+//const formatDatabase = require('module-date.js');
 const treatmentDatabase = require('module-database.js');
 const toolbox = require('module-toolbox.js');
 const everyPlayer = require('module-competitor.js');

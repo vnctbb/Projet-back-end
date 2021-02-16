@@ -10,25 +10,19 @@ app.use(bodyParser.urlencoded({
   extended : false
 }));
 
-// module mongoClient
-const MongoClient = require('mongodb').MongoClient;
-const nameDb = 'timeline'; // nom de la database
-const collectionEvents = 'eventList'; // nom de la collection des évènements
-const collectionGames = 'previousGame'; // nom de la collection des parties précédentes
-const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
-
-// module personnalisé
-const formatDatabase = require('./modules/module-date.js');
-const treatmentDatabase = require('./modules/module-database.js');
-const toolbox = require('./modules/module-toolbox.js');
-const everyPlayer = require('./modules/module-competitor.js');
-const distribution = require('./modules/module-distribution.js');
+// modules personnalisé
 const game = require('./modules/module-game.js');
+const toolbox = require('./modules/module-toolbox.js');
+const formatDate = require('./modules/module-date.js');
+const disconnect = require('./modules/module-disconnect.js');
+const everyPlayer = require('./modules/module-competitor.js');
+const treatmentDatabase = require('./modules/module-database.js');
+const distribution = require('./modules/module-distribution.js');
 
 // déclaration de la variable PORT
 const PORT = process.env.PORT || 3000;
 
-// déclaration de fichier statique
+// déclaration des chemins de fichier statique
 app.use('/css', express.static(__dirname + '/public/css'));
 app.use('/img', express.static(__dirname + '/public/images'));
 app.use('/js', express.static(__dirname + '/public/javascript'));
@@ -42,65 +36,73 @@ app.set('view engine', 'pug');
 
 // requête GET page d'accueil
 // renvoi de la page index
-app.get('/', (req, res) => {
-  const avatar = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+app.get('/', (req, res, next) => {
+  // tableau regroupant les noms des différents fichiers images
+  const avatarName = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+  // requête à la base de donnée pour récupérer les anciennes parties
   treatmentDatabase.find({
     collection : 'game',
     sort : {date : -1},
     done : (datas) => {
-      formatDatabase(datas);
-      res.render('index',{previousGame : datas, personnage : avatar});
+      // formatage de la date des données reçues
+      formatDate(datas);
+      // render de la page index
+      res.render('index',{previousGame : datas, allAvatar : avatarName});
     }
   });
 });
 
 // requête POST réception des données du formulaire de la page index
 // renvoi de la page lobby
-app.post('/lobby', (req, res) => {
-  const personnage = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+app.post('/lobby', (req, res, next) => {
+  const avatarName = ['vladimir', 'monica', 'cesar', 'angelix', 'peter', 'lee'];
+  // affectation des valeurs envoyée par le formulaire
+  // dans un objet player
   const player = {
     username : req.body.username,
-    avatar : req.body.personnage,
+    avatarChoosen : req.body.personnage,
   }
-  let error = false;
 
-  everyPlayer.list.forEach(item => {
-    if(item.name == player.username){
-      error = 'usernameTaken';
-    }
-  });
+  // récupération de l'index de l'avatar choisit par l'utilisateur
+  const index = avatarName.indexOf(player.avatarChoosen);
 
-  if(player.username == ''){
-    error = 'emptyUsername';
-  }
-  if(personnage.indexOf(player.avatar) < 0){
-    error = 'emptyAvatar';
-  }
-  if(game.running){
-    error = 'gameIsRunning';
-  }
-  if(everyPlayer.list.length === 8){
-    error = 'maxPlayer';
-  }
-  if(player.username.length < 3 || player.username.length > 25){
-    error = 'usernameNotOk'
-  }
+  // vérification du formulaire
+  const error = toolbox.validateForm(player.username, index, game.running, everyPlayer.list);
+
+  // requête à la base de donnée pour récupérer les anciennes parties
   treatmentDatabase.find({
     collection : 'game',
     done : (datas) => {
-      formatDatabase(datas);
+      // formatage de la date des données reçues
+      formatDate(datas);
       if(error){
-        res.render('index', {error : error, previousGame : datas, personnage : personnage});
+        // formulaire invalide, render de la page avec index
+        // avec envoi de l'erreur au template pug
+        res.render('index', {error : error, previousGame : datas, allAvatar : avatarName});
       } else {
-        res.render('lobby', {username : player.username, avatar : player.avatar, previousGame : datas});
+        // formulaire valide, render de la page lobby
+        // avec envoi des données saisies par l'utilisateur au template pug
+        res.render('lobby', {player : player, previousGame : datas});
       }
     }
   });
 });
 
 // gestion erreur d'URL
-app.use( (req, res) => {
-  res.status(404).render('404');
+app.use((req,res,next) => {
+  const datasPug = {};
+  switch (res.statusCode) {
+      case '500':
+          datasPug.titre = 'ERREUR 500';
+          datasPug.erreur = 'Erreur interne - La base de donnée ne répond pas';
+          break;
+      default:
+          res.status(404);
+          datasPug.titre = 'ERREUR 404';
+          datasPug.erreur = 'La page demandée n\'existe pas !';
+  }
+  console.log('il ya un problème')
+  res.render('error', datasPug);
 });
 
 // constante 'server' pour relier le serveur express au serveur websocket
@@ -119,122 +121,66 @@ treatmentDatabase.find({
 });
 
 /**
- * Variables diverse
- */
-
-/**
 * Serveur Websocket (avec socket.io)
 */
 
+// module socket.io
 const socketio = require('socket.io');
+const createPlayer = require('./modules/module-player.js');
+// création du serveur socket.io
 const ioServer = socketio(server);
 
+// réception d'une connexion au websocket
 ioServer.on('connection', (socket) => {
   console.log('connexion établie');
 
-  const NewPlayer = require('module-player.js');
+  // module personnalisé
+  const createPlayer = require('./modules/module-player.js');
+  // déclaration du joueur qui vient de se connecter
   let player;
 
   // socket qui reçoit les informations du nouveau joueur
-  // créer le joueur
-  // ajoute le joueur au tableau des joueurs
-  socket.on('saveUsername', (data) => {
-    player = new NewPlayer(socket.id, data.username, dataBase, data.avatar);
-    everyPlayer.list.push(player);
-    socket.broadcast.emit('newPlayer', player);
-    socket.emit('giveHand', {player : player});
+  socket.on('savePlayerInformation', (data) => {
+    // Appel de la méthode createPlayer
+    player = createPlayer(socket, socket.id, data.username, dataBase, data.avatar);
   });
 
-  // socket qui renvoi tous les joueurs
-  // en enlevant le dernier joueur (qui est celui ayant fait la demande)
+  // socket qui renvoi tous les joueurs dans le lobby au joueur qui vient de se connecter
   socket.on('askForOtherPlayer', () => {
-    socket.emit('askForOtherPlayer', everyPlayer.list.slice(0, (everyPlayer.list.length-1)));
+    // on enlève le tableau le joueur qui vient de se connecter
+    socket.emit('otherPlayerInLobby', everyPlayer.list.slice(0, (everyPlayer.list.length-1)));
   });
 
+  // socket qui indique que les joueurs ne sont pas prêt à jouer
   ioServer.emit("notReadyToPlay");
 
+  // socket reçu lorsque qu'un joueur indique qu'il est prêt
   socket.on('playerIsReady', () => {
     player.nowReady();
-    const playersReady = everyPlayer.ready()
-    if(playersReady === true){
-      game.start(everyPlayer.list);
-      ioServer.emit('startGaming', {firstPlayer : everyPlayer.list[0]});
-      ioServer.to(everyPlayer.list[0].id).emit("readyToPlay", {firstPlayer : true});
-    }
-  });
-
-  socket.on('eventPositionned', (datas) => {
-    if(datas.position){
-      const index = toolbox.getIndex(player.hand, datas.elementId);
-      player.positionOk(index);
-    }
-    if(player.nbOfCard == 0 && player.points > 400){
-      ioServer.emit('weHaveAWinner', player);
-      game.win(player);
-      MongoClient.connect(urlDb, {useUnifiedTopology : true}, (err, client) => {
-        if(err) throw err;
-        const collection = client.db(nameDb).collection(collectionGames);
-        collection.insertOne(game, (err, res) => {
-          if(err) throw err;
-          console.log('Game saved in DataBase');
-          client.close();
-        });
-      });
-    };
-    const nextPlayer = toolbox.getNextPlayer(player.id, everyPlayer.list);
-    socket.broadcast.emit('eventPositionned', {innerHTML : datas.innerHTML});
-    ioServer.emit('renderDate', datas.actualCard);
-    ioServer.to(player.id).emit("notReadyToPlay");
-    ioServer.to(nextPlayer.id).emit("readyToPlay", {firstPlayer : false});
-    everyPlayer.list[toolbox.getIndex(everyPlayer.list, player.id)].points = player.points;
-    ioServer.emit('whoNeedToPlay', {nextPlayer : nextPlayer, player : player}); //changer nom variable player = ancien player pour les points 
+    everyPlayer.verificationAllPlayerAreReady(game, ioServer);
   });
 
   // socket qui reçoit les infos de la carte à vérifier
-  socket.on('requestServerCheck', (datas) => {
-    const retour = distribution.cardVerification(datas.order, datas.cardId);
-    retour.index = datas.index;
-    socket.emit('responseServerCheck', retour);
+  socket.on('checkLastCardPlayed', (datas) => {
+    distribution.cardVerification(datas, socket);
+  });
+
+  // socket reçu lorsque qu'un joueur à positionner un évènement
+  socket.on('eventWellPositioned', (datas) => {
+    distribution.eventWellPositioned(player, dataBase, datas, socket, ioServer);
   });
 
   // traitement sur les cartes lorsque la position est mauvaise
   socket.on('wrongPosition', (datas) => {
-    player.streak = 1;
-    player.points -= 50;
-    const indexCard = toolbox.getIndex(player.hand, datas.elementId);
-    const indexPlayer = toolbox.getIndex(everyPlayer.list, player.id);
-    player.hand.splice(indexCard, 1);
-    player.hand.push(distribution.takeCard(dataBase));
-    everyPlayer.list[indexPlayer].hand = player.hand;
-    socket.emit('giveHand', {player : player, newCard : true});
-    socket.broadcast.emit('wrongPosition', {player : player, innerHTML : datas.innerHTML});
+    distribution.wrongPosition(player, dataBase, datas, socket)
   });
 
+  // socket reçu lorsque qu'un joueur se déconnecte
   socket.on('disconnect', () => {
-    everyPlayer.list.forEach((playerInArray, index) => {
-      if(playerInArray.id == player.id){
-        playerInArray.hand.forEach(card => {
-          dataBase.forEach(event => {
-            if(event.titre === card.titre){
-              event.given = false;
-            }
-          })
-        });
-        everyPlayer.list.splice(index, 1);
-      }
-    });
-    if(game.running){
-      ioServer.emit('onePlayerIsGone', {name : player.name, running : true});
-      game.running = false;
-      treatmentDatabase.find({
-        collection : 'events',
-        done : (datas) => {
-          dataBase = datas;
-        }
-      });
-    } else {
-      ioServer.emit('onePlayerIsGone', {name : player.name, id : player.id, running : false});
-    }
+    // suppression des cartes du joueur
+    disconnect.removeCards(player, dataBase, ioServer);
+    // suppression du joueur
+    disconnect.removePlayer(player, dataBase, ioServer);
   });
 
 });

@@ -10,13 +10,13 @@ socket.on('connect', (req, res) => {
   console.log('connection établie');
 
   // Envoi au serveur les informations du joueur qui vient de se connecter
-  socket.emit('saveUsername', {username : username, avatar : avatar});
+  socket.emit('savePlayerInformation', {username : username, avatar : avatar});
 
   // Demande au serveur si d'autre joueurs sont déja dans le lobby
   socket.emit('askForOtherPlayer');
   
   // Reception les informations des joueurs déja dans le lobby
-  socket.on('askForOtherPlayer', (allPlayer) => {
+  socket.on('otherPlayerInLobby', (allPlayer) => {
     allPlayer.forEach(player => {
       // Applique la fonction qui permet d'afficher les autres joueurs
       // pour chaque joueur
@@ -30,12 +30,13 @@ const button = document.querySelector('.buttonReady');
 
 // Event "click" sur le bouton
 button.addEventListener('click', () => {
+  button.disabled = true;
   // Applique la fonction de changement de status
   clickOnReadyButton();
 });
 
 // Reception les informations de joueur arrivé après
-socket.on('newPlayer', (player) => {
+socket.on('newPlayerInLobby', (player) => {
   // Applique la fonction qui permet d'afficher les autres joueurs
   renderOtherPlayer(player);
 });
@@ -91,21 +92,21 @@ socket.on('giveHand', datas => {
       order.push(draggableOrder.id);
     });
     if(draggable.parentNode.className === 'container reception'){
-      socket.emit('requestServerCheck', {order : order, index : index, cardId : draggable.id});
+      socket.emit('checkLastCardPlayed', {order : order, index : index, cardId : draggable.id});
     }
   };
 });
 
-socket.on('responseServerCheck', (datas) => {
+socket.on('serverResponseToCardCheck', (datas) => {
   const position = datas.returnValue;
   const draggedElement = activeDraggableElement;
   if(draggedElement.parentNode.className === 'container reception'){
     const orderListEvent = document.querySelector('.reception').innerHTML;
-    socket.emit('eventPositionned', {innerHTML : orderListEvent, elementId : draggedElement.id});
+    socket.emit('eventWellPositioned', {innerHTML : orderListEvent, elementId : draggedElement.id});
     if(position === true){
       draggedElement.draggable = false;
       const orderListEvent = document.querySelector('.reception').innerHTML;
-      socket.emit('eventPositionned', {innerHTML : orderListEvent, position : true, actualCard : datas.actualCard});
+      socket.emit('eventWellPositioned', {innerHTML : orderListEvent, position : true, actualCard : datas.actualCard});
     } else {
       setTimeout(() => {
         const container = document.querySelector('.player');
@@ -137,7 +138,7 @@ socket.on('readyToPlay', (data) => {
   }
 });
 
-socket.on('notReadyToPlay', (data) => {
+socket.on('notReadyToPlay', () => {
   draggables = document.querySelectorAll('.draggable');
   draggables.forEach(draggable => {
     draggable.draggable = false;
@@ -150,7 +151,11 @@ socket.on('whoNeedToPlay', (data) => {
   div.querySelector('.playerPoints').innerText = `Points : ${data.player.points}`;
 });
 
-socket.on('eventPositionned', (datas) => {
+socket.on('eventWellPositioned', (datas) => {
+  document.querySelector('.reception').innerHTML = datas.innerHTML;
+});
+
+socket.on('wrongPosition', (datas) => {
   document.querySelector('.reception').innerHTML = datas.innerHTML;
 });
 
@@ -162,11 +167,8 @@ socket.on('renderDate', (card) => {
   }
 });
 
-socket.on('wrongPosition', (datas) => {
-  document.querySelector('.reception').innerHTML = datas.innerHTML;
-});
+socket.on('somebodyWin', (data) => {
 
-socket.on('weHaveAWinner', (data) => {
   const div = document.createElement('div');
   div.className = 'winnerMenu'
   div.innerHTML = `<p>${data.name} à gagné à la partie!</p><p>${data.points} points</p><a href="/">Retour à l'accueil</a>`;
@@ -174,7 +176,6 @@ socket.on('weHaveAWinner', (data) => {
 });
 
 socket.on('startGaming', (data) => {
-  button.disabled = true;
   let secondes = 5;
   const interval = setInterval(() => {
     document.querySelector('h2').innerText = `Lancement de la partie dans ${secondes} secondes`;

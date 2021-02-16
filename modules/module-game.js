@@ -1,11 +1,13 @@
 'use strict'
 
+// module personnalisé
+const everyPlayer = require('./module-competitor.js');
+
 /**
  * Module représentant la partie en cours
  */
 
- const everyPlayer = require('./module-competitor.js');
-
+ // objet représentant une partie
 const game = {
 	date: 0,
 	duration: 0,
@@ -21,11 +23,13 @@ const game = {
 		points: 0,
 	},
   running : false,
+	// methode pour lancer la partie
   start : function (array) {
     this.running = true;
     this.date = new Date();
     this.nbOfPlayers = array.length;
   },
+	// methode lorsque qu'un joueur à gagné
 	win : function (player) {
 		this.winner.name = player.name;
 		this.winner.points = player.points;
@@ -34,4 +38,5 @@ const game = {
 	}
 }
 
+// export du module
 module.exports = game;

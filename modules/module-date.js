@@ -48,4 +48,5 @@ const formatDatabase = (datas) => {
   });
 };
 
+// export du module
 module.exports = formatDatabase;

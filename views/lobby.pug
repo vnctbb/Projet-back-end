@@ -14,9 +14,9 @@ body
     h2 En attente d'autre joueurs...
   .board
     .containers.playerList
-      img(src=`/img/avatar/${avatar}.png`).avatar
+      img(src=`/img/avatar/${player.avatarChoosen}.png`).avatar
       div
-        h3.playerName #{username}
+        h3.playerName #{player.username}
         p.playerPoints Points :
       div.status
         button.buttonReady Prêt à jouer?
@@ -42,8 +42,8 @@ body
     p inspiré du jeu de société Timeline par Frédéric Henry
     p Projet back-end Ifocop
 script.
-  let username = !{JSON.stringify(username)};
-  let avatar = !{JSON.stringify(avatar)};
+  let username = !{JSON.stringify(player.username)};
+  let avatar = !{JSON.stringify(player.avatarChoosen)};
 script(src='/js/repertory.js')
 script(src='/js/previous-game.js')
 script(src='/js/script.js')

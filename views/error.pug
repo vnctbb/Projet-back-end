@@ -2,7 +2,7 @@ doctype html
 head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  title Erreur 404 - Timeline
+  title #{titre} - Timeline
   script(src="/socket.io/socket.io.min.js")
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
   link(rel='stylesheet' href='/css/index.css')
@@ -12,8 +12,8 @@ body
       i.fas.fa-trophy
     h1 Timeline
   section.erreur
-    h2 Erreur 404
-    p Il semble que l'URL fournit ne soit pas valide !
+    h2 #{titre} 
+    p #{erreur}
     p Clique sur le bouton en dessous pour rejoindre le site !
     a(href="/") Timeline
   footer.absolute

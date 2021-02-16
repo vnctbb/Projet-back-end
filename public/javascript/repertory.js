@@ -10,7 +10,7 @@ const renderPlayer = (player) => {
   player.hand.forEach((card, index) => {
     const newCard = document.createElement('p');
     newCard.id = card.id;
-    newCard.draggable = true;
+    newCard.draggable = false;
     newCard.classList.add('draggable');
     newCard.innerHTML = card.titre;
     newPlayer.appendChild(newCard);

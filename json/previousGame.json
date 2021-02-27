@@ -1,0 +1,298 @@
+[{
+  "_id": {
+    "$oid": "6039664fed206d16c99e67da"
+  },
+  "date": {
+    "$date": "2021-02-26T21:18:36.170Z"
+  },
+  "duration": {
+    "$date": "2021-02-26T21:21:19.644Z"
+  },
+  "nbOfPlayers": 2,
+  "ListOfPlayers": [
+    {
+      "name": "",
+      "points": 0
+    }
+  ],
+  "winner": {
+    "name": "Gluglu",
+    "points": 440
+  },
+  "room": "classique",
+  "running": true,
+  "listOfPlayers": [
+    {
+      "id": "TVFiBS-OeBRiQZdVAAAF",
+      "name": "Gluglu",
+      "hand": [],
+      "avatar": "vladimir",
+      "nbOfCard": -1,
+      "streaks": 1.4,
+      "points": 440,
+      "room": "classique",
+      "ready": true
+    },
+    {
+      "id": "oKi_1YYO6PGCcRoHAAAH",
+      "name": "Glagla",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c83281"
+          },
+          "titre": "Début de la construction du phare d'Alexandrie"
+        }
+      ],
+      "avatar": "vladimir",
+      "nbOfCard": 0,
+      "streaks": 1,
+      "points": 290,
+      "room": "classique",
+      "ready": true
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6039670be792f5001535bf36"
+  },
+  "date": {
+    "$date": "2021-02-26T21:22:52.039Z"
+  },
+  "duration": {
+    "$date": "2021-02-26T21:24:26.523Z"
+  },
+  "nbOfPlayers": 2,
+  "ListOfPlayers": [
+    {
+      "name": "",
+      "points": 0
+    }
+  ],
+  "winner": {
+    "name": "Fou ta cagoule",
+    "points": 410
+  },
+  "room": "classique",
+  "running": true,
+  "listOfPlayers": [
+    {
+      "id": "kJayZDjIWP7OHIRfAAAB",
+      "name": "Vinvin",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8327b"
+          },
+          "titre": "Invention du sachet de thé"
+        }
+      ],
+      "avatar": "vladimir",
+      "nbOfCard": 1,
+      "streaks": 1.5999999999999999,
+      "points": 310,
+      "room": "classique",
+      "ready": true
+    },
+    {
+      "id": "xl3XmPUbnizr_pqrAAAD",
+      "name": "Fou ta cagoule",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c83283"
+          },
+          "titre": "Invention de la boite de conserve"
+        }
+      ],
+      "avatar": "peter",
+      "nbOfCard": 0,
+      "streaks": 1.5999999999999999,
+      "points": 410,
+      "room": "classique",
+      "ready": true
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "603969d575929417b0d7df1b"
+  },
+  "date": {
+    "$date": "2021-02-26T21:33:38.171Z"
+  },
+  "duration": {
+    "$date": "2021-02-26T21:36:20.752Z"
+  },
+  "nbOfPlayers": 2,
+  "ListOfPlayers": [
+    {
+      "name": "",
+      "points": 0
+    }
+  ],
+  "winner": {
+    "name": "Vinvin",
+    "points": 420
+  },
+  "room": "classique",
+  "running": true,
+  "listOfPlayers": [
+    {
+      "id": "ijcl11yOA11r2CNKAAAD",
+      "name": "Vincent",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8327b"
+          },
+          "titre": "Invention du sachet de thé"
+        }
+      ],
+      "avatar": "vladimir",
+      "nbOfCard": 0,
+      "streaks": 1.2,
+      "points": 220,
+      "room": "classique",
+      "ready": true
+    },
+    {
+      "id": "nqsK2ocOG1pYMkM8AAAF",
+      "name": "Vinvin",
+      "hand": [],
+      "avatar": "vladimir",
+      "nbOfCard": -1,
+      "streaks": 1.7999999999999998,
+      "points": 420,
+      "room": "classique",
+      "ready": true
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60396d3091dd32001599c3d6"
+  },
+  "date": {
+    "$date": "2021-02-26T21:49:06.431Z"
+  },
+  "duration": {
+    "$date": "2021-02-26T21:50:39.816Z"
+  },
+  "nbOfPlayers": 2,
+  "ListOfPlayers": [
+    {
+      "name": "",
+      "points": 0
+    }
+  ],
+  "winner": {
+    "name": "Robert",
+    "points": 520
+  },
+  "room": "classique",
+  "running": true,
+  "listOfPlayers": [
+    {
+      "id": "R2TwGAnclsjdBAyWAAAB",
+      "name": "Esmeralda",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c83284"
+          },
+          "titre": "Domestication du mouton"
+        },
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8329c"
+          },
+          "titre": "Naissance des échecs"
+        }
+      ],
+      "avatar": "monica",
+      "nbOfCard": 2,
+      "streaks": 1.2,
+      "points": 150,
+      "room": "classique",
+      "ready": true
+    },
+    {
+      "id": "_RttZrPJAKqYRdMuAAAD",
+      "name": "Robert",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8327e"
+          },
+          "titre": "Invention de la monnaie"
+        }
+      ],
+      "avatar": "lee",
+      "nbOfCard": 1,
+      "streaks": 1.7999999999999998,
+      "points": 520,
+      "room": "classique",
+      "ready": true
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "60397d5e2774cd0015b04fd1"
+  },
+  "date": {
+    "$date": "2021-02-26T22:58:47.039Z"
+  },
+  "duration": {
+    "$date": "2021-02-26T22:59:41.821Z"
+  },
+  "nbOfPlayers": 2,
+  "ListOfPlayers": [
+    {
+      "name": "",
+      "points": 0
+    }
+  ],
+  "winner": {
+    "name": "Duduche",
+    "points": 520
+  },
+  "room": "classique",
+  "running": true,
+  "listOfPlayers": [
+    {
+      "id": "mCIrxWiD9H4WM3iKAAAE",
+      "name": "Vincent",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8328b"
+          },
+          "titre": "1ère apparition de la créature de Frankenstein"
+        }
+      ],
+      "avatar": "vladimir",
+      "nbOfCard": 1,
+      "streaks": 1.5999999999999999,
+      "points": 360,
+      "room": "classique",
+      "ready": true
+    },
+    {
+      "id": "2RhGfgyb3F644zfVAAAG",
+      "name": "Duduche",
+      "hand": [
+        {
+          "id": {
+            "$oid": "602014b56831f621e0c8327c"
+          },
+          "titre": "Création de la NBA"
+        }
+      ],
+      "avatar": "vladimir",
+      "nbOfCard": 1,
+      "streaks": 1.7999999999999998,
+      "points": 520,
+      "room": "classique",
+      "ready": true
+    }
+  ]
+}]

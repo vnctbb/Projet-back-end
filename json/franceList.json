@@ -1,0 +1,379 @@
+[{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a11"
+  },
+  "titre": "Ouverture du tunnel sous la Manche",
+  "date": 1994,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a12"
+  },
+  "titre": "Prise de la Bastille, début de la Révolution française",
+  "date": 1789,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a13"
+  },
+  "titre": "Le Petit Prince",
+  "date": 1943,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a14"
+  },
+  "titre": "Commune de Paris",
+  "date": 1871,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a15"
+  },
+  "titre": "Abolition de l'esclavage",
+  "date": 1848,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a16"
+  },
+  "titre": "Disparition du franc au profit de l'euro",
+  "date": 2002,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a17"
+  },
+  "titre": "Procès et condamnation de Jeanne d'Arc",
+  "date": 1879,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a18"
+  },
+  "titre": "Bataille de Castillon et fin de la guerre de Cent Ans",
+  "date": 1453,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a19"
+  },
+  "titre": "Grève et manifestations dans tout le pays",
+  "date": 1968,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1a"
+  },
+  "titre": "François 1er remporte sa première bataille à Marignan",
+  "date": 1515,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1b"
+  },
+  "titre": "Début de la construction de Notre-Dame de Paris",
+  "date": 1751,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1c"
+  },
+  "titre": "Droit de vote des femmes",
+  "date": 1944,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1d"
+  },
+  "titre": "Emergence du cubisme",
+  "date": 1907,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1e"
+  },
+  "titre": "Mise en place des allocations familiales",
+  "date": 1932,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a1f"
+  },
+  "titre": "Début de la Vème République",
+  "date": 1958,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a20"
+  },
+  "titre": "Loi emblématique encadrant les congés payés",
+  "date": 1936,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a21"
+  },
+  "titre": "Mort de Louis IX, dit Saint Louis",
+  "date": 1270,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a22"
+  },
+  "titre": "Promulgation de la loi instaurant le PACS",
+  "date": 1999,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a23"
+  },
+  "titre": "Fondation de Massalia (Marseille)",
+  "date": -600,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a24"
+  },
+  "titre": "Napoléon 1er se couronne empereur des Français",
+  "date": 1804,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a25"
+  },
+  "titre": "Mort de Clovis",
+  "date": 511,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a26"
+  },
+  "titre": "Opération Overlord : les alliés débarquent en Normandie",
+  "date": 1944,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a27"
+  },
+  "titre": "Massacre de la Saint-Barthélémy",
+  "date": 1572,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a28"
+  },
+  "titre": "La Citroën 2CV est présentée au salon de l'automobile de Paris",
+  "date": 1948,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a29"
+  },
+  "titre": "La papauté s'installe à Avignon",
+  "date": 1309,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2a"
+  },
+  "titre": "Promulgation du Code civil des Français",
+  "date": 1804,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2b"
+  },
+  "titre": "Molière interprète pour la première fois Le Bourgeois gentilhomme",
+  "date": 1670,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2c"
+  },
+  "titre": "Armistice de la Première Guerre Mondiale",
+  "date": 1918,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2d"
+  },
+  "titre": "Loi Veil : dépénalisation de l'IVG",
+  "date": 1975,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2e"
+  },
+  "titre": "Le général de Gaulle organise la résistance depuis Londre",
+  "date": 1940,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a2f"
+  },
+  "titre": "Création de la Banque de France",
+  "date": 1800,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a30"
+  },
+  "titre": "Louis Pasteur découvre le vaccin contre la rage",
+  "date": 1885,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a31"
+  },
+  "titre": "Première édition du Guide Michelin",
+  "date": 1900,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a32"
+  },
+  "titre": "Siège de Gergovie et d'Alésia",
+  "date": -52,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a33"
+  },
+  "titre": "Déclaration des droits de l'homme et du citoyen",
+  "date": 1789,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a34"
+  },
+  "titre": "Pierre de Couvertin rénove les jeux olympiques",
+  "date": 1894,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a35"
+  },
+  "titre": "Les Trois Mousquetais",
+  "date": 1844,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a36"
+  },
+  "titre": "Mort de Louis XIV",
+  "date": 1715,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a37"
+  },
+  "titre": "Début du règne de Charlemagne",
+  "date": 768,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a38"
+  },
+  "titre": "Fin de la guerre des Gaules",
+  "date": -50,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a39"
+  },
+  "titre": "Libération de Paris",
+  "date": 1944,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3a"
+  },
+  "titre": "La France participe à la guerre d'indépendance américaine",
+  "date": 1778,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3b"
+  },
+  "titre": "Astérix le gaulois",
+  "date": 1961,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3c"
+  },
+  "titre": "Premier vol de la fusée ariane",
+  "date": 1979,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3d"
+  },
+  "titre": "Attila, le rois des Huns, envahit la Gaule",
+  "date": 451,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3e"
+  },
+  "titre": "Les blagues Carambar",
+  "date": 1969,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a3f"
+  },
+  "titre": "Siège de Paris par les Vikings",
+  "date": 845,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a40"
+  },
+  "titre": "Louis XIV s'installe au château de Versailles",
+  "date": 1682,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a41"
+  },
+  "titre": "Rafle du Vel'd'Hiv",
+  "date": 1942,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a42"
+  },
+  "titre": "Baitaille d'Austerlitz",
+  "date": 1805,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a43"
+  },
+  "titre": "Fin de la construction de la tour Eiffel",
+  "date": 1889,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a5dc35c703fc688a44"
+  },
+  "titre": "Abolition de la peine de mort",
+  "date": 1981,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a6dc35c703fc688a45"
+  },
+  "titre": "Premier recueil des Fables de La Fontaine",
+  "date": 1668,
+  "given": false
+},{
+  "_id": {
+    "$oid": "603a02a6dc35c703fc688a46"
+  },
+  "titre": "Loi de la séparation des Églises et de l'État",
+  "date": 1981,
+  "given": false
+}]

@@ -1,0 +1,379 @@
+[{
+  "_id": {
+    "$oid": "602002406831f621e0c8326b"
+  },
+  "titre": "Apparition des abeilles",
+  "date": -1000000,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327c"
+  },
+  "titre": "Création de la NBA",
+  "date": 1946,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83287"
+  },
+  "titre": "Premier président afro-américain aux États-Unis",
+  "date": 2008,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83298"
+  },
+  "titre": "Inauguration du Colisée",
+  "date": 80,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329c"
+  },
+  "titre": "Naissance des échecs",
+  "date": 570,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8326d"
+  },
+  "titre": "1er hold-up d'une banque",
+  "date": 1866,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327e"
+  },
+  "titre": "Invention de la monnaie",
+  "date": -680,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83273"
+  },
+  "titre": "Invention du champagne",
+  "date": 1664,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327f"
+  },
+  "titre": "Premier homme dans l'espace",
+  "date": 1961,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83285"
+  },
+  "titre": "Sortie de l'album thriller",
+  "date": 1982,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83293"
+  },
+  "titre": "Sortie du film La Guerre des Étoiles",
+  "date": 1977,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328c"
+  },
+  "titre": "Création de Facebook",
+  "date": 2004,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83297"
+  },
+  "titre": "Marie Curie obtient le prix Nobel de physique",
+  "date": 1903,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8326e"
+  },
+  "titre": "Découverte de la gravitation universelle",
+  "date": 1666,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8326f"
+  },
+  "titre": "Invention du 45 tours",
+  "date": 1949,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83288"
+  },
+  "titre": "Vingt mille lieues sous les mers",
+  "date": 1869,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83276"
+  },
+  "titre": "Naissance du hip-hop",
+  "date": 1974,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83284"
+  },
+  "titre": "Domestication du mouton",
+  "date": -9200,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329d"
+  },
+  "titre": "Invention du fer à repasser électrique",
+  "date": 1882,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329f"
+  },
+  "titre": "Invention de la bouteille en plastique",
+  "date": 1963,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83272"
+  },
+  "titre": "Découverte du mouvement des planètes",
+  "date": 1513,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83278"
+  },
+  "titre": "Formulation de la théorie de l'évolution",
+  "date": 1842,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83282"
+  },
+  "titre": "Invention du dé",
+  "date": -3000,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83294"
+  },
+  "titre": "Invention de la console de jeux vidéo",
+  "date": 1971,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83277"
+  },
+  "titre": "Invention de la guitare électrique",
+  "date": 1934,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328e"
+  },
+  "titre": "Apparition de la fourchette",
+  "date": 972,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329a"
+  },
+  "titre": "Cendrillon et la Petite Pantoufle de verre",
+  "date": 1697,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83286"
+  },
+  "titre": "1er vol d'une navette spatiale",
+  "date": 1981,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8326c"
+  },
+  "titre": "Apparition du croissant",
+  "date": 1683,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c832a0"
+  },
+  "titre": "Domestication du chat",
+  "date": -4500,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83270"
+  },
+  "titre": "Apparition du zéro",
+  "date": 628,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83275"
+  },
+  "titre": "Cléopatre est couronnée reine d'Égypte",
+  "date": -51,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83280"
+  },
+  "titre": "Invention de la carte à jouer",
+  "date": 900,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328b"
+  },
+  "titre": "1ère apparition de la créature de Frankenstein",
+  "date": 1818,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328f"
+  },
+  "titre": "1ère apparition de Sherlock Holmes",
+  "date": 1887,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83296"
+  },
+  "titre": "Parution du conte Blanche-Neige",
+  "date": 1812,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329b"
+  },
+  "titre": "Invention du shampoing",
+  "date": 1914,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83274"
+  },
+  "titre": "Invention du vin",
+  "date": -6000,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83271"
+  },
+  "titre": "Invention du lave-linge",
+  "date": 1765,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83281"
+  },
+  "titre": "Début de la construction du phare d'Alexandrie",
+  "date": -297,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83283"
+  },
+  "titre": "Invention de la boite de conserve",
+  "date": 1810,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83291"
+  },
+  "titre": "Fondation du premier village",
+  "date": -10000,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83295"
+  },
+  "titre": "Invention de l'aérosol",
+  "date": 1927,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8329e"
+  },
+  "titre": "Invention de la conserve",
+  "date": 1809,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83289"
+  },
+  "titre": "Début de la construction du Colosse de Rhodes",
+  "date": -292,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328a"
+  },
+  "titre": "Invention du taille-crayon",
+  "date": 1828,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83292"
+  },
+  "titre": "Découverte du tombeau de Toutânkhamon",
+  "date": 1922,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83299"
+  },
+  "titre": "Invention de la bouteille en verre",
+  "date": -200,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83290"
+  },
+  "titre": "1ère apparition d'une soucoupe volante",
+  "date": 1947,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327b"
+  },
+  "titre": "Invention du sachet de thé",
+  "date": 1908,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c83279"
+  },
+  "titre": "Légende du minotaure",
+  "date": -1600,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8328d"
+  },
+  "titre": "Invention du cadran solaire",
+  "date": -1500,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327a"
+  },
+  "titre": "Invention du couteau de table",
+  "date": 1637,
+  "given": false
+},{
+  "_id": {
+    "$oid": "602014b56831f621e0c8327d"
+  },
+  "titre": "Invention du revolver",
+  "date": 1836,
+  "given": false
+}]

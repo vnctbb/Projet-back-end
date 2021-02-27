@@ -1,11 +1,21 @@
 # Projet-back-end Vincent Bongrand
 Projet jeu multijoueur back-end
 
+Techno utilisées : JS, Express, Pug, MongoDB.
+
 Projet hébergé via heroku à l'adresse suivante :
   https://vincent-bongrand-back-end-game.herokuapp.com
 
 Les fichiers json correspondant à la base de données sont dans le dossier /json.
-Il y'a en tout 4 collections.
+
+Nom de la base de donnée : "timeline"
+
+Il y'a 4 collections, leurs noms :
+
+France : "franceList";
+Classique : "classiqueList";
+Invention : "inventionList";
+Jeu précédant : "previousGame";
 
 Pour récupérer le projet :
   - Télécharger le fichier gitHub ;

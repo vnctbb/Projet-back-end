@@ -1,8 +1,10 @@
 'use strict'
 
+
 /**
- * Module pour formater l'affichage de la date 
+ * module pour formater l'affichage de la date 
  */
+
 
 // ajoute un zero à un nombre, si il est inférieur à 10;
 const addZero = (number) => {
@@ -47,6 +49,7 @@ const formatDatabase = (datas) => {
     item.durationFormat = getDuration(item.date, item.duration);
   });
 };
+
 
 // export du module
 module.exports = formatDatabase;

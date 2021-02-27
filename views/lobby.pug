@@ -1,19 +1,19 @@
 doctype html
 head
   meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
   title Timeline - Lobby - Le jeu qui vous fait voyager dans le temps !
   script(src="/socket.io/socket.io.min.js")
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css')
   link(rel='stylesheet' href='/css/lobby.css')
 body
   header
-    a(href='#')
-      i.fas.fa-trophy
+    i.far.fa-comment-dots.buttonChat
+    i.fas.fa-award
     h1 Timeline
     h2 En attente d'autre joueurs...
   .board
-    .containers.playerList
+    .mainPlayer
       img(src=`/img/avatar/${player.avatarChoosen}.png`).avatar
       div
         h3.playerName #{player.username}
@@ -21,29 +21,46 @@ body
       div.status
         button.buttonReady Prêt à jouer?
         i.fas.fa-times.red
-    .container.reception
-    .otherPlayerList
+    .reception.containers
+    .otherPlayer
   div.menuPartie
     div
       i.fas.fa-times.cross
-      h2 Dernières parties
+      h2.gameTitle Dernières parties
+    div.gameButton
+      p.lastTen 10 dernières parties
+      p.allGame Toutes les parties
     div.exposeGame
-      each game in previousGame
+      each game in allGame
         div.oneGame
           div.gray
             p #{game.dateFormat} - #{game.durationFormat}
             p Joueurs : #{game.nbOfPlayers}
+          p.roomWinner #{game.room}
           p.gray Vainqueur :
           p.nameWinner #{game.winner.name} avec #{game.winner.points} points
           ul.gray Liste complète des joueurs :
             each player in game.listOfPlayers
               li #{player.name} - #{player.points} points
+  div.chat
+    .conversation 
+    button.backChatButton Retour
+    form#chat
+      input(type="text")
+      input(type="submit" value="Envoyer") 
+  .answer
+    p.answerText 
   footer
     p inspiré du jeu de société Timeline par Frédéric Henry
     p Projet back-end Ifocop
 script.
+  let room = !{JSON.stringify(room)};
+  let lastTen = !{JSON.stringify(lastTen)};
+    let allGame = !{JSON.stringify(allGame)};
   let username = !{JSON.stringify(player.username)};
   let avatar = !{JSON.stringify(player.avatarChoosen)};
-script(src='/js/repertory.js')
+script(src='/js/script-chat.js')
 script(src='/js/previous-game.js')
+script(src="/js/script-event.js") 
+script(src='/js/script-render.js')
 script(src='/js/script.js')

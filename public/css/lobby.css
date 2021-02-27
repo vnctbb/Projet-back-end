@@ -1,13 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,700;0,900;1,400&display=swap');
+/* Import fonts */
+@import url('http://fonts.cdnfonts.com/css/bw-modelica');
 
 body {
-  background-color: #282C35;
+  background-color: #72A1E5;
   color: rgb(59, 59, 59);
-  font-family: 'Robot', sans-serif;
+  font-family: 'Bw Modelica', sans-serif;
   margin: 0;
   user-select: none;
 }
 
+/* couleur générique */
 .red{
   color: red;
 }
@@ -20,38 +22,137 @@ body {
   color: rgb(59, 59, 59);
 }
 
+/* ------------------------------
+* --------------- HEADER -----------------
+------------------------------ */
+
 header{
   text-align: center;
 }
 
 header > h1{
-  color: #FE9900;
-  font-size: 5em;
+  color: #BA3F1D;
+  font-size: 6em;
   font-weight: 900;
 }
 
-header > a > .fas{
-  color: #FE9900;
+header > .fas, header > .far{
+  color: #BA3F1D;
   font-size: 3em;
   position: absolute;
   right: 40px;
-  top: 40px;
+  top: 10px; /* COMMENT => 40 */
   transition-property: color;
   transition-duration: 1s;
 }
 
-header > a > .fas:hover{
+header > .far {
+  cursor: pointer;
+  right: none;
+  left: 40px;
+  width: 40px;
+}
+
+header > .fas:hover, header > .far:hover{
   color: #ffa825;
 }
 
+.alertMessage{
+  color: #BA3F1D;
+  font-size: 0.8em;
+  font-weight: bold;
+  position: fixed;
+  left: 100px;
+  top: 10px;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-name: degrader;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes degrader {
+  from {
+    color: #BA3F1D;
+  }
+
+  25%{
+    color: #FE9900;
+  }
+
+  50% {
+    color: #62C168;
+  }
+
+  75%{
+    color: #FE9900;
+  }
+
+  to {
+    color: #BA3F1D;
+  }
+}
+
+
+@media screen and (min-width: 600px) {
+  header > .fas, header > .far{
+    top: 40px;
+  }
+  .alertMessage{
+    top: 30px;
+    font-size: 1.2em;
+  }
+}
+
+/* ------------------------------
+* ------------- GAME BOARD ---------------
+------------------------------ */
+
 .board{
   display: flex;
+  flex-flow: row wrap;
+}
+
+/* -------- CONTAINER GAME BOARD ----------- */
+
+.mainPlayer,
+.reception,
+.otherPlayer{
+  box-shadow: 5px 5px 2px #656974;
+  background-color: #fffdf5;
+  border: 4px solid #BA3F1D;
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 1rem;
+  min-height: 600px;
+}
+
+.otherPlayer{
+  min-height: 100px;
+}
+
+/* joueur principal */
+.mainPlayer{
+  text-align: center;
+  width: 25%;
+}
+
+.mainPlayer > div:first-of-type{
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+.avatar{
+  width: 100px;
 }
 
 .playerName{
   color: rgb(59, 59, 59);
-  font-size: 1.5em;
+  font-size: 1em;
+  margin: -10px 0;
 }
+
+/* bouton de changement du status */
 
 .status{
   align-items: center;
@@ -61,6 +162,7 @@ header > a > .fas:hover{
 }
 
 .status > button{
+  background-color: #FFF;
   border: 1px solid lightgray;
   border-radius: 10px;
   cursor: pointer;
@@ -73,101 +175,42 @@ header > a > .fas:hover{
   margin: 0 10px;
 }
 
-.container,
-.containers,
-.notContainers,
-.otherPlayerList{
-  border: 4px solid #FE9900;
-  border-radius: 15px;
-  padding: 1rem;
-  margin: 1rem;
+/* carte à jouer */
+
+.player{
+  box-shadow: none;
+  border: none;
+  margin: 0 auto;
+  width: 80%;
   min-height: 300px;
 }
 
-.playerList{
+.draggable{
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 15px;
+  box-sizing: border-box;
+  border: 2px solid #72A1E5;
+  cursor: grab;
+  font-size: 0.8em;
   text-align: center;
+  overflow-wrap: break-word;
 }
 
-.playerList > div:first-of-type{
-  align-items: center;
-  display: flex;
-  justify-content: space-around;
+.dragging{
+  opacity : 0.5;
 }
 
-.player{
-  border: none;
-  margin: 0px;
-}
-
-.avatar{
-  width: 150px;
-}
+/* réception des cartes */
 
 .reception{
-  width: 50%;
+  width: 40%;
 }
 
-.playerList,
-.otherPlayerList{
-  width: 25%;
-}
-
-.otherPlayerList > div{
+.reception > .draggable {
+  cursor: not-allowed;
   display: flex;
-}
-
-.otherPlayerList > div > div{
-  display: unset;
-}
-
-.draggable{
-  padding: 1rem;
-  background-color: white;
-  border-radius: 15px;
-  border: 1px solid rgb(59, 59, 59);
-  cursor: move;
-  display: flex;
-  font-size: 0.8em;
   justify-content: space-between;
-}
-
-.notDraggable{
-  padding: 1rem;
-  background-color: white;
-  border-radius: 15px;
-  border: 1px solid rgb(59, 59, 59);
-  font-size: 0.8em;
-}
-
-.winnerMenu{
-  background-color: rgba(59, 59, 59, 0.8);;
-  border-radius: 15px;
-  font-size: 1.5em;
-  height: 400px;
-  left: calc(50% - 250px);
-  position: absolute;
-  text-align: center;
-  top: 300px;
-  width: 500px;
-}
-
-.winnerMenu > p{
-  color: rgb(253, 249, 206);
-  font-weight: 900;
-  font-size: 1.5em;
-  margin: 75px;
-}
-
-.winnerMenu > a{
-  color: rgb(253, 249, 206);
-}
-
-.player{
-  width: 80%;
-}
-
-.draggable.dragging{
-  opacity : 0.5;
 }
 
 span{
@@ -175,22 +218,70 @@ span{
   font-weight: bold;
 }
 
-.menuPartie{
-  background-color: #72A1E5;
+/* autres joueurs */
+
+.otherPlayer{
+  width: 80%;
+}
+
+.otherPlayer > div{
+  display: flex;
+}
+
+.otherPlayer > div > div{
+  display: unset;
+}
+
+@media screen and (min-width: 800px) {
+  .board{
+    flex-flow: row;
+  }
+  .avatar{
+    width: 150px;
+  }
+  .playerName{
+    font-size: 1.5em;
+    margin: none;
+  }
+  .mainPlayer,
+  .otherPlayer{
+    width: 25%;
+  }
+  .reception{
+    width: 50%;
+  }
+  .draggable{
+    padding: 1rem;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .playerName{
+    font-size: 2em;
+    margin: none;
+  }
+}
+
+/* ------------------------------
+* ----- PREVIOUS GAME & CHAT------------
+------------------------------ */
+
+/* affichage des partie terminée */
+.menuPartie, .chat{
+  background-color: #FE9900;
   color: #FFF;
   height: 100%;
   overflow-y: scroll;
   position: fixed;
-  right: -600px;
+  right: -450px;
   top: 0px;
-  width: 595px;
+  width: 445px;
   z-index: 2;
 }
 
-.menuPartie > div{
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
+.menuPartie h2{
+  font-size: 2em;
+  margin-right: 25px;
 }
 
 .menuPartie .cross{
@@ -199,9 +290,46 @@ span{
   margin-left: 25px;
 }
 
-.menuPartie h2{
+.gameTitle, .exposeGame{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuPartie .fa-times{
+  cursor: pointer;
   font-size: 2em;
-  margin-right: 25px;
+  margin-left: 25px;
+}
+
+.fa-times:hover{
+  color: #72A1E5;
+}
+
+.gameTitle{
+  justify-content: flex-end;
+}
+
+.exposeGame{
+  flex-flow: column;
+}
+
+.gameButton{
+  display: flex;
+  justify-content: space-around;
+}
+
+.lastTen, .allGame{
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.lastTen:hover, .allGame:hover{
+  color: #72A1E5;
+}
+
+ul{
+  width: 80%;
 }
 
 .come{
@@ -213,7 +341,7 @@ span{
 
 @keyframes slidein {
   from {
-    right: -600px;
+    right: -450px;
   }
 
   to {
@@ -233,19 +361,14 @@ span{
   }
 
   to {
-    right: -600px;
+    right: -450px;
   }
-}
-
-.exposeGame{
-  display: flex;
-  flex-flow: column;
 }
 
 .oneGame{
   background-color: #FFF;
   border-radius: 15px;
-  color: #FE9900;
+  color: #BA3F1D;
   height: 100%;
   padding: 10px;
   margin-bottom: 20px;
@@ -258,10 +381,6 @@ span{
   justify-content: space-between;
 }
 
-.nameWinner{
-  font-size: 2em;
-}
-
 .oneGame li{
   list-style-type: none;
   margin: 5px;
@@ -271,13 +390,233 @@ span{
   margin-top: 15px;
 }
 
+.roomWinner{
+  color: #62C168;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.nameWinner{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* Chat */
+.chat{
+  background-color: #BA3F1D;
+  border-right: 4px solid #62C168;
+  left: -600px;
+  width: 445px;
+  /*padding: 20px;
+  min-height: 0px;*/
+}
+
+.comeChat{
+  left: 0;
+  animation-duration: 2s;
+  animation-name: chatslidein;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes chatslidein {
+  from {
+    left: -600px;
+  }
+
+  to {
+    left: 0;
+  }
+}
+
+.backChat{
+  animation-duration: 2s;
+  animation-name: chatslideback;
+  animation-timing-function: cubic-bezier(0.25, 1, 0.25, 1);
+}
+
+@keyframes chatslideback {
+  from {
+    left: 0px;
+  }
+
+  to {
+    left: -600px;
+  }
+}
+
+.backChatButton{
+  border: none;
+  font-size: 2em;
+  color:#72A1E5;
+  font-weight: bold;
+  background-color: transparent;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.conversation{
+  background-color: #FFF;
+  height: 90%;
+  display: flex;
+  flex-flow: column-reverse nowrap;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.chat > form{
+  display: flex;
+  margin: 10px;
+  text-align: center;
+}
+
+.chat > form > input:first-child{
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  height: 40px;
+  margin-right: 15px;
+  outline: none;
+  padding: 7px;
+  width: 70%;
+}
+
+.chat > form > input:last-child{
+  border: none;
+  border-radius: 25px;
+  height: 40px;
+  outline: none;
+  padding: 7px;
+  width: 100px;
+  font-weight: bold;
+  color: rgb(59, 59, 59);
+}
+
+.newMessage, .myMessage{
+  border-radius: 25px;
+  box-sizing: border-box;
+  color: #282C35;
+  font-size: 1.3em;
+  margin: 15px;
+  padding: 0px 20px;
+  width: 400px;
+}
+
+.newMessage{
+  background-color: #A77E58;
+}
+
+.myMessage{
+  background-color: #EEE3AB;
+  margin-left: auto;
+  text-align: right;
+}
+
+.myMessage > p:first-child, .newMessage > p:first-child{
+  font-weight: bold;
+  word-wrap: break-word;
+}
+
+.myMessage > p:last-child, .newMessage > p:last-child{
+  margin-left: 15px;
+  word-wrap: break-word;
+}
+
+@media screen and (min-width: 800px) { 
+  .chat{
+    width: 595;
+  }
+}
+
+/* ------------------------------
+* ---------------  ANSWER --------------
+------------------------------ */
+
+.answer{
+  left: -200px;
+  position: absolute;
+  top: 350px;
+  text-align: center;
+}
+
+.answer > p{
+  font-size: 4em;
+  font-weight: bold;
+}
+
+.answerIsTrue{
+  left: -200px;
+  animation-duration: 4.5s;
+  animation-name: isTrue, degrader;
+  animation-timing-function: linear;
+}
+
+@keyframes isTrue {
+  from {
+    left: 100%;
+  }
+
+  to {
+    left: -200px;
+  }
+}
+.answerIsFalse{
+  left: 100%;
+  animation-duration: 4.5s;
+  animation-name: isFalse, degraderAgain;
+  animation-timing-function: linear;
+}
+
+@keyframes isFalse {
+  from {
+    left: -200px;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
+
+/* ------------------------------
+* ------------- WINNER MENU ------------
+------------------------------ */
+
+.winnerMenu{
+  background-color: rgba(59, 59, 59, 0.8);;
+  border-radius: 15px;
+  font-size: 1.5em;
+  min-height: 400px;
+  left: calc(50% - 250px);
+  padding: 10px;
+  position: absolute;
+  text-align: center;
+  top: 300px;
+  overflow-wrap: break-word;
+  width: 500px;
+}
+
+.winnerMenu > p{
+  color: rgb(253, 249, 206);
+  font-weight: 900;
+  font-size: 1.5em;
+  margin: 75px;
+}
+
+.winnerMenu > a{
+  color: rgb(253, 249, 206);
+}
+
+/* FOOTER */
 footer{
   bottom: 10px;
   font-size: 0.9em;
   left: calc(50% - (95% / 2));
   text-align: right;
   margin: 75px auto 0px auto;
-  width: 95%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
 }

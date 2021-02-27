@@ -9,32 +9,59 @@ head
 body
   header
     a(href='#')
-      i.fas.fa-trophy
+      i.fas.fa-award
     h1 Timeline
   section
     h2 Règles du jeu 
-    p L'objectif du jeu est de remettre les cartes représentant des évènements historique dans le bon ordre. Le premier à ne plus avoir de carte à gagner !
-  form(action="/lobby" method="POST") 
-    p Choisis un nom et un avatar avant de commencer
+    p L'objectif du jeu est de remettre les cartes représentant des évènements historique dans le bon ordre. Le premier à ne plus avoir de carte à gagner et plus de 400 points !
+  form(action="/lobby" method="POST")
+    p.bold Choisissez à quelle version du jeu vous voulez jouer !
+    .roomChoice
+      div
+        p France
+        input(type="radio" name='room' id=`france` value=`france` required)
+        if rooms.france.length === 8
+          p.red 8/8
+        else
+          p #{rooms.france.length}/8
+      div
+        p Classique
+        input(type="radio" name='room' id=`classique` value=`classique` required)
+        if rooms.classique.length === 8
+          p.red 8/8
+        else
+          p #{rooms.classique.length}/8
+      div
+        p Invention
+        input(type="radio" name='room' id=`invention` value=`invention` required)
+        if rooms.invention.length === 8
+          p.red 8/8
+        else
+          p #{rooms.invention.length}/8
+    p.bold Choisis un nom et un avatar avant de commencer
     div
       each avatar in allAvatar 
         div.personnage
           img(src=`/img/avatar/${avatar}.png`, alt=`${avatar}`)
           input(type="radio" name='personnage' id=`${avatar}` value=`${avatar}` required)
-    input(type="text" name="username" minlength=3 maxlength=26)
+    input(type="text" name="username" minlength=3 maxlength=26 class="field")
     input(type="submit" value="Rejoindre la salle de jeu")
     if (error)
       p.red= error
   div.menuPartie
     div
       i.fas.fa-times.cross
-      h2 Dernières parties
+      h2.gameTitle Dernières parties
+    div.gameButton
+      p.lastTen 10 dernières parties
+      p.allGame Toutes les parties
     div.exposeGame
-      each game in previousGame
+      each game in allGame
         div.oneGame
           div.gray
             p #{game.dateFormat} - #{game.durationFormat}
             p Joueurs : #{game.nbOfPlayers}
+          p.roomWinner #{game.room}
           p.gray Vainqueur :
           p.nameWinner #{game.winner.name} avec #{game.winner.points} points
           ul.gray Liste complète des joueurs :
@@ -48,4 +75,7 @@ body
     div
       p inspiré du jeu de société Timeline par Frédéric Henry
       p Projet back-end Ifocop
+script.
+  let allGame = !{JSON.stringify(allGame)};
+  let lastTen = !{JSON.stringify(lastTen)};
 script(src='/js/previous-game.js')

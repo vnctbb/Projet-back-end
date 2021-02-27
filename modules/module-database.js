@@ -1,13 +1,17 @@
 'use strict'
 
+
 /**
- * Module pour les opérations avec la base de donnée
+ * module pour les opérations avec la base de donnée
  */
+
 
 // module mongoClient
 const MongoClient = require('mongodb').MongoClient;
 const nameDb = 'timeline'; // nom de la database
-const collectionEvents = 'eventList'; // nom de la collection des évènements
+const collectionFrance = 'franceList'; // nom de la collection des évènements
+const collectionClassique = 'eventList'; // nom de la collection des évènements
+const collectionInvention = 'inventionList'; // nom de la collection des évènements
 const collectionGames = 'previousGame'; // nom de la collection des parties précédentes
 const urlDb = 'mongodb+srv://admin:admin@diwjs14.hyd9w.mongodb.net/timeline?retryWrites=true&w=majority'; // URL de la database
 
@@ -22,9 +26,21 @@ const connect = callback => {
 // fonction find
 const find = settings => {
 
-  // détermine la collection sur laquelle faire la requête
-  if(settings.collection === 'events') {settings.collection = collectionEvents};
-  if(settings.collection === 'game') {settings.collection = collectionGames};
+  // setting de la collection
+  switch (settings.collection) {
+    case "france" :
+      settings.collection = collectionFrance
+    break;
+    case "classique" :
+      settings.collection = collectionClassique
+    break;
+    case "invention" :
+      settings.collection = collectionInvention
+    break;
+    case "game" :
+      settings.collection = collectionGames
+    break;
+  }
 
   // si aucun filtre n'est transmis alors on lui passe un objet vide
   if (!settings.filter) {
@@ -45,10 +61,10 @@ const find = settings => {
     // appel de la méthode
     collection.find(settings.filter).sort(settings.sort).toArray((err, datas) => {
       if (err) settings.error();
-      // fermeture du client
-      client.close();
       // application des instructions donné dans settings
       settings.done(datas);
+      // fermeture du client
+      client.close();
     });
   });
 };
@@ -58,7 +74,6 @@ const insert = settings => {
   // si aucune erreur n'est transmis alors on lui passe une erreur
   if (!settings.error) {
     settings.error = () => {
-        res.status('500');
         next();
     };
   }
@@ -76,6 +91,7 @@ const insert = settings => {
     });
   });
 };
+
 
 // export du module
 module.exports = {

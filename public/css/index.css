@@ -1,22 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,700;0,900;1,400&display=swap');
+@import url('http://fonts.cdnfonts.com/css/bw-modelica');
 
 body{
-  background-color: #282C35;
+  background-color: #72A1E5;
   color: rgb(59, 59, 59);
   height: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Bw Modelica', sans-serif;
 }
 
-header{
-  text-align: center;
-}
-
-header > h1{
-  color: #FE9900;
-  font-size: 5em;
-  font-weight: 900;
-}
-
+/* couleur générique */
 .red{
   color: red;
 }
@@ -25,8 +16,30 @@ header > h1{
   color: rgb(59, 59, 59);
 }
 
-.fa-trophy{
-  color: #FE9900;
+.bold{
+  font-weight: bold;
+}
+
+.absolute{
+  position: absolute;
+}
+
+/* ------------------------------
+* --------------- HEADER -----------------
+------------------------------ */
+
+header{
+  text-align: center;
+}
+
+header > h1{
+  color: #BA3F1D;
+  font-size: 5em;
+  font-weight: 900;
+}
+
+.fa-award{
+  color: #BA3F1D;
   font-size: 3em;
   position: absolute;
   right: 35px;
@@ -35,24 +48,41 @@ header > h1{
   transition-duration: 1s;
 }
 
-.fa-trophy:hover{
+.fa-award:hover{
   color: #ffa825;
 }
+
+/* ------------------------------
+* --------------- FORM -----------------
+------------------------------ */
 
 section{
   text-align: center;
 }
 
 form{
-  margin: 75px;
+  margin: 25px 0px 75px 0px;
   text-align: center;
-}
-
-form{
   align-items: center;
+  box-sizing: border-box;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
+}
+
+form > div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 20px;
+}
+
+.field{
+  color: rgb(59, 59, 59);
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  width: 300px;
 }
 
 form input{
@@ -61,11 +91,34 @@ form input{
   height: 40px;
 }
 
-form > div {
-  display: flex;
-  margin: 20px;
+form input:last-child{
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: bold;
 }
 
+form input:last-child:hover{
+  background-color: #FFF;
+  box-shadow: 0px 0px 2px #3075d4;
+  cursor: pointer;
+}
+
+/* choix de la room */
+.roomChoice{
+  display: flex;
+  justify-content: center;
+  width: 80%;
+}
+
+.roomChoice > div {
+  margin: 0 15px;
+}
+
+.roomChoice > div > p {
+  margin: 0;
+}
+
+/* choix de l'avatar */
 .personnage{
   align-items: center;
   display: flex;
@@ -76,40 +129,42 @@ form > div {
   width: 100px;
 }
 
-form input:nth-child(3){
-  color: rgb(59, 59, 59);
-  font-size: 1.8em;
-  margin-bottom: 20px;
-  padding-left: 10px;
-  width: 300px;
+/* erreur formulaire*/
+.erreur > h2{
+  font-size: 2em;
+  font-weight : 900;
 }
 
-form input:last-child{
-  cursor: pointer;
+.erreur > p:nth-child(3){
+  margin-bottom: 50px;
 }
 
-form input:last-child:hover{
-  background-color: #cecccc;
-  border: 1px solid #afafaf;
-  cursor: pointer;
+.erreur > a{
+  color: white;
+  padding: 15px 30px;
+  background-color: #72A1E5;
+  border-radius: 25px;
+  text-decoration: none;
 }
+
+.erreur > a:hover{
+  background-color: #5b90db;
+}
+
+/* ------------------------------
+* ----- PREVIOUS GAME ---------------
+------------------------------ */
 
 .menuPartie{
-  background-color: #72A1E5;
+  background-color: #FE9900;
   color: #FFF;
   height: 100%;
   overflow-y: scroll;
   position: fixed;
   right: -600px;
   top: 0px;
-  width: 595px;
+  width: 445px;
   z-index: 2;
-}
-
-.menuPartie > div{
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
 }
 
 .menuPartie .fa-times{
@@ -123,6 +178,29 @@ form input:last-child:hover{
   margin-right: 25px;
 }
 
+.gameTitle, .exposeGame{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.gameTitle{
+  justify-content: flex-end;
+}
+
+.exposeGame{
+  display: flex;
+  flex-flow: column;
+}
+
+ul{
+  width: 80%;
+}
+
+.fa-times:hover{
+  color: #72A1E5;
+}
+
 .come{
   right: 0;
   animation-duration: 2s;
@@ -132,7 +210,7 @@ form input:last-child:hover{
 
 @keyframes slidein {
   from {
-    right: -600px;
+    right: -450px;
   }
 
   to {
@@ -152,19 +230,29 @@ form input:last-child:hover{
   }
 
   to {
-    right: -600px;
+    right: -450px;
   }
 }
 
-.exposeGame{
+.gameButton{
   display: flex;
-  flex-flow: column;
+  justify-content: space-around;
 }
 
+.lastTen, .allGame{
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.lastTen:hover, .allGame:hover{
+  color: #72A1E5;
+}
+
+/* one game */
 .oneGame{
   background-color: #FFF;
   border-radius: 15px;
-  color: #FE9900;
+  color: #BA3F1D;
   height: 100%;
   padding: 10px;
   margin-bottom: 20px;
@@ -177,10 +265,6 @@ form input:last-child:hover{
   justify-content: space-between;
 }
 
-.nameWinner{
-  font-size: 2em;
-}
-
 .oneGame li{
   list-style-type: none;
   margin: 5px;
@@ -190,12 +274,28 @@ form input:last-child:hover{
   margin-top: 15px;
 }
 
+.roomWinner{
+  color: #62C168;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 0px;
+  text-transform: capitalize;
+}
+
+.nameWinner{
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* ------------------------------
+* ----------------- FOOTER ---------------
+------------------------------ */
+
 footer{
   bottom: 10px;
   font-size: 0.9em;
-  left: calc(50% - (95% / 2));
   text-align: right;
-  width: 95%;
+  width: 100%;
 }
 
 footer div:first-child{
@@ -216,29 +316,4 @@ footer a {
 
 footer a:hover{
   color: rgb(14, 13, 13);
-}
-
-.erreur > h2{
-  font-size: 2em;
-  font-weight : 900;
-}
-
-.erreur > p:nth-child(3){
-  margin-bottom: 50px;
-}
-
-.erreur > a{
-  color: white;
-  padding: 20px 40px;
-  background-color: #72A1E5;
-  border-radius: 15px;
-  text-decoration: none;
-}
-
-.erreur > a:hover{
-  background-color: #5b90db;
-}
-
-.absolute{
-  position: absolute;
 }

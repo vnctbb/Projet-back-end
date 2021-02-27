@@ -1,42 +1,56 @@
 'use strict'
 
-// module personnalisé
+// module requis
 const everyPlayer = require('./module-competitor.js');
+
 
 /**
  * Module représentant la partie en cours
  */
 
+
  // objet représentant une partie
-const game = {
-	date: 0,
-	duration: 0,
-	nbOfPlayers: 0,
-	ListOfPlayers: [
-		{
-		name: '',
-		points: 0,		
-		},
-	],
-	winner: {
-		name: '',
-		points: 0,
-	},
-  running : false,
+class Game {
+	constructor () {
+		this.date= 0;
+		this.duration= 0;
+		this.nbOfPlayers= 0;
+		this.ListOfPlayers= [
+			{
+			name: '',
+			points: 0,		
+			}
+		];
+		this.winner= {
+			name: '',
+			points: 0,
+		};
+		this.room= '';
+  	this.running = false;
+	};
 	// methode pour lancer la partie
-  start : function (array) {
+  start (array) {
     this.running = true;
     this.date = new Date();
     this.nbOfPlayers = array.length;
-  },
+  };
 	// methode lorsque qu'un joueur à gagné
-	win : function (player) {
+	win (player) {
+		this.room = player.room;
 		this.winner.name = player.name;
 		this.winner.points = player.points;
 		this.duration = new Date();
-		this.listOfPlayers = everyPlayer.list;
-	}
+		this.listOfPlayers = everyPlayer[player.room];
+	};
+};
+
+// objet représentant les différents parties possible
+const game = {
+	france : new Game(),
+	classique : new Game(),
+	invention : new Game()
 }
+
 
 // export du module
 module.exports = game;
